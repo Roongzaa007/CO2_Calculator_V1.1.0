@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASHRAE 62.1 CO2 Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+        
+        .version-info {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            text-align: right;
+            font-size: 0.9em;
+            color: #7f8c8d;
+            line-height: 1.3;
+        }
+        
+        .version-number {
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .lite-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+        
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 1024px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .container {
+                padding: 20px;
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .version-info {
+                position: relative;
+                top: 0;
+                right: 0;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+        }
+        
+        .report-section {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+        }
+        
+        .report-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        .report-btn {
+            padding: 12px 25px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .report-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 2% auto;
+            padding: 0;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+            font-size: 1.3em;
+        }
+        
+        .close {
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.8);
+            transition: color 0.3s ease;
+        }
+        
+        .close:hover {
+            color: white;
+        }
+        
+        .modal-body {
+            padding: 30px;
+        }
+        
+        .report-template {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+        }
+        
+        .report-header {
+            text-align: center;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .report-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .report-subtitle {
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+        
+        .report-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .report-section-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 25px 0 15px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+        
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .report-table th,
+        .report-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .report-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+        }
+        
+        .report-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .report-table tr:hover {
+            background-color: #e3f2fd;
+        }
+        
+        .watermark {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+        
+        .export-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .export-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .export-pdf {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .export-excel {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .export-word {
+            background: #3498db;
+            color: white;
+        }
+        
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 95%;
+                margin: 5% auto;
+            }
+            
+            .modal-body {
+                padding: 20px;
+            }
+            
+            .report-meta {
+                grid-template-columns: 1fr;
+            }
+            
+            .report-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .export-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        
+        .unit-toggle {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+            border-radius: 25px;
+            padding: 5px;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .unit-btn {
+            padding: 8px 20px;
+            border: none;
+            background: transparent;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: #7f8c8d;
+        }
+        
+        .unit-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+        }
+        
+        .input-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .input-section h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+        }
+        
+        .input-section h3::before {
+            content: "🏢";
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #34495e;
+            font-weight: 600;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+        
+        .unit {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            margin-left: 5px;
+        }
+        
+        .calculate-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+        
+        .results-section {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 15px;
+            color: white;
+        }
+        
+        .results-section h3 {
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            text-align: center;
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .result-card {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .result-card h4 {
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .result-card .value {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .result-card .unit {
+            font-size: 0.8em;
+            opacity: 0.8;
+        }
+        
+        .info-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #e8f4f8;
+            border-radius: 10px;
+            border-left: 5px solid #3498db;
+        }
+        
+        .info-section h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .info-section ul {
+            color: #34495e;
+            padding-left: 20px;
+        }
+        
+        .info-section li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="version-info">
+            <div class="version-number">Version 1.0.0<span class="lite-badge">LITE</span></div>
+            <div>25 July 2025</div>
+        </div>
+        
+        <div class="report-section" id="reportSection" style="display: none;">
+            <h3>📄 Generate Professional Report</h3>
+            <p>สร้างรายงานผลการคำนวณสำหรับงานออกแบบและนำเสนอ</p>
+            <div class="report-buttons">
+                <button class="report-btn" onclick="generateReport()">
+                    📊 Preview Report
+                </button>
+                <button class="report-btn" onclick="exportToPDF()">
+                    📄 Export PDF
+                </button>
+                <button class="report-btn" onclick="exportToExcel()">
+                    📈 Export Excel
+                </button>
+                <button class="report-btn" onclick="exportToWord()">
+                    📝 Export Word
+                </button>
+            </div>
+        </div>
+        
+        <!-- Report Modal -->
+        <div id="reportModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>📊 HVAC Calculation Report</h3>
+                    <span class="close" onclick="closeReport()">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="report-template" id="reportContent">
+                        <!-- Report content will be generated here -->
+                    </div>
+                    <div class="export-buttons">
+                        <button class="export-btn export-pdf" onclick="exportToPDF()">
+                            📄 Export PDF
+                        </button>
+                        <button class="export-btn export-excel" onclick="exportToExcel()">
+                            📈 Export Excel
+                        </button>
+                        <button class="export-btn export-word" onclick="exportToWord()">
+                            📝 Export Word
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="header">
+            <h1>ASHRAE 62.1 CO2 Calculator</h1>
+            <p>เครื่องมือคำนวณ CO2 และ Ventilation Requirements สำหรับวิศวกร HVAC</p>
+        </div>
+        
+        <div class="unit-toggle">
+            <button class="unit-btn active" id="siBtn" onclick="toggleUnit('SI')">SI (เมตริก)</button>
+            <button class="unit-btn" id="ipBtn" onclick="toggleUnit('IP')">I-P (อิมพีเรียล)</button>
+        </div>
+        
+        <div class="calculator-grid">
+            <div class="input-section">
+                <h3>ข้อมูลอาคาร (Building Information)</h3>
+                
+                <div class="form-group">
+                    <label for="spaceType">ประเภทพื้นที่ (Space Type):</label>
+                    <select id="spaceType">
+                        <optgroup label="📚 สถานศึกษา (Educational Facilities)">
+                            <option value="classroom_age3to5">ห้องเรียน 3-5 ปี (Classroom Age 3-5)</option>
+                            <option value="classroom_age6plus">ห้องเรียน 6+ ปี (Classroom Age 6+)</option>
+                            <option value="lecture_hall">หอบรรยาย (Lecture Hall)</option>
+                            <option value="library">ห้องสมุด (Library)</option>
+                        </optgroup>
+                        
+                        <optgroup label="🏢 สำนักงาน (Office Buildings)">
+                            <option value="office_space" selected>พื้นที่สำนักงาน (Office Space)</option>
+                            <option value="conference_room">ห้องประชุม (Conference Room)</option>
+                            <option value="reception">แผนกต้อนรับ (Reception)</option>
+                            <option value="telephone_closet">ห้องโทรศัพท์ (Telephone Closet)</option>
+                        </optgroup>
+                        
+                        <optgroup label="🍽️ อาหารและเครื่องดื่ม (Food & Beverage)">
+                            <option value="restaurant_dining">ห้องอาหาร (Restaurant Dining)</option>
+                            <option value="cafeteria">โรงอาหาร (Cafeteria)</option>
+                            <option value="kitchen_commercial">ครัวพาณิชย์ (Commercial Kitchen)</option>
+                            <option value="bar_lounge">บาร์/ลาวน์จ (Bar/Lounge)</option>
+                        </optgroup>
+                        
+                        <optgroup label="🛍️ ร้านค้า (Retail)">
+                            <option value="retail_sales">ร้านค้าปลีก (Retail Sales)</option>
+                            <option value="supermarket">ซุปเปอร์มาร์เก็ต (Supermarket)</option>
+                            <option value="mall_common">ศูนย์การค้า-พื้นที่รวม (Mall Common)</option>
+                            <option value="barber_shop">ร้านตัดผม (Barber Shop)</option>
+                            <option value="beauty_salon">ร้านเสริมสวย (Beauty Salon)</option>
+                            <option value="pharmacy">ร้านขายยา (Pharmacy)</option>
+                        </optgroup>
+                        
+                        <optgroup label="🎭 ที่ชุมนุมสาธารณะ (Public Assembly)">
+                            <option value="auditorium">หอประชุม (Auditorium)</option>
+                            <option value="church_chapel">โบสถ์/วิหาร (Church/Chapel)</option>
+                            <option value="courtroom">ศาลา (Courtroom)</option>
+                            <option value="legislative_chamber">ห้องสภา (Legislative Chamber)</option>
+                            <option value="library_public">ห้องสมุดสาธารณะ (Public Library)</option>
+                            <option value="museum">พิพิธภัณฑ์ (Museum)</option>
+                        </optgroup>
+                        
+                        <optgroup label="🏨 โรงแรมและที่พัก (Hotels & Lodging)">
+                            <option value="hotel_bedroom">ห้องนอนโรงแรม (Hotel Bedroom)</option>
+                            <option value="hotel_lobby">ล็อบบี้โรงแรม (Hotel Lobby)</option>
+                            <option value="dormitory_bedroom">ห้องนอนหอพัก (Dormitory Bedroom)</option>
+                        </optgroup>
+                        
+                        <optgroup label="🏃‍♂️ กีฬาและบันเทิง (Sports & Entertainment)">
+                            <option value="gymnasium">โรงยิม (Gymnasium)</option>
+                            <option value="health_club_aerobics">ฟิตเนส/แอโรบิค (Health Club/Aerobics)</option>
+                            <option value="health_club_weight">ฟิตเนส/ยกน้ำหนัก (Health Club/Weight)</option>
+                            <option value="disco_dance">ดิสโก้/เต้นรำ (Disco/Dance)</option>
+                            <option value="bowling_alley">โบว์ลิ่ง (Bowling Alley)</option>
+                            <option value="gambling_casino">คาสิโน (Gambling Casino)</option>
+                            <option value="spectator_areas">ที่นั่งผู้ชม (Spectator Areas)</option>
+                            <option value="swimming_pools">สระว่ายน้ำ (Swimming Pools)</option>
+                        </optgroup>
+                        
+                        <optgroup label="🚗 ขนส่ง (Transportation)">
+                            <option value="transportation_platform">ชานชาลา (Transportation Platform)</option>
+                            <option value="transportation_waiting">ห้องรอขนส่ง (Transportation Waiting)</option>
+                        </optgroup>
+                        
+                        <optgroup label="🏥 สถานพยาบาล (Medical Facilities)">
+                            <option value="patient_room">ห้องผู้ป่วย (Patient Room)</option>
+                            <option value="operating_room">ห้องผ่าตัด (Operating Room)</option>
+                        </optgroup>
+                        
+                        <optgroup label="🏗️ ทั่วไป (General)">
+                            <option value="break_room">ห้องพัก (Break Room)</option>
+                            <option value="corridor">ทางเดิน (Corridor)</option>
+                            <option value="storage">ห้องเก็บของ (Storage)</option>
+                            <option value="bank_vault">ห้องนิรภัยธนาคาร (Bank Vault)</option>
+                            <option value="computer_room">ห้องคอมพิวเตอร์ (Computer Room)</option>
+                            <option value="photo_studio">สตูดิโอถ่ายรูป (Photo Studio)</option>
+                        </optgroup>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="width">ความกว้าง (Width): <span class="unit" id="widthUnit">m</span></label>
+                    <input type="number" id="width" value="10" min="1" step="0.1">
+                </div>
+                
+                <div class="form-group">
+                    <label for="length">ความยาว (Length): <span class="unit" id="lengthUnit">m</span></label>
+                    <input type="number" id="length" value="10" min="1" step="0.1">
+                </div>
+                
+                <div class="form-group">
+                    <label>พื้นที่รวม (Total Area): <span class="unit" id="areaUnit">m²</span></label>
+                    <input type="text" id="calculatedArea" value="100" readonly style="background-color: #e9ecef; color: #6c757d;">
+                </div>
+                
+                <div class="form-group">
+                    <label for="occupancy">จำนวนผู้ใช้งาน (Occupancy): <span class="unit">คน</span></label>
+                    <input type="number" id="occupancy" value="20" min="1">
+                </div>
+                
+                <div class="form-group">
+                    <label for="ceilingHeight">ความสูงเพดาน (Ceiling Height): <span class="unit" id="heightUnit">m</span></label>
+                    <input type="number" id="ceilingHeight" value="3" min="2" step="0.1">
+                </div>
+            </div>
+            
+            <div class="input-section">
+                <h3>พารามิเตอร์ HVAC (HVAC Parameters)</h3>
+                
+                <div class="form-group">
+                    <label for="targetCO2">Target CO2 Level: <span class="unit">ppm</span></label>
+                    <input type="number" id="targetCO2" value="1000" min="500" max="1500" step="50">
+                </div>
+                
+                <div class="form-group">
+                    <label for="outdoorCO2">Outdoor CO2 Concentration: <span class="unit">ppm</span></label>
+                    <input type="number" id="outdoorCO2" value="400" min="300" max="500">
+                </div>
+                
+                <div class="form-group">
+                    <label for="ventilationEff">Ventilation Effectiveness:</label>
+                    <input type="number" id="ventilationEff" value="1.0" min="0.5" max="1.5" step="0.1">
+                </div>
+                
+                <div class="form-group">
+                    <label for="activityLevel">Activity Level:</label>
+                    <select id="activityLevel">
+                        <option value="sedentary">นั่งทำงาน (Sedentary)</option>
+                        <option value="light">งานเบา (Light Activity)</option>
+                        <option value="moderate">งานปานกลาง (Moderate Activity)</option>
+                        <option value="heavy">งานหนัก (Heavy Activity)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="overrideOA" style="margin-right: 8px;">
+                        Override OA Rate (for testing)
+                    </label>
+                </div>
+                
+                <div class="form-group" id="overrideOAGroup" style="display: none;">
+                    <label for="overrideOAValue">Custom Outdoor Airflow: <span class="unit" id="oaUnit">L/s</span></label>
+                    <input type="number" id="overrideOAValue" value="200" min="0" step="10">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Fresh Air Calculation Section -->
+        <div class="input-section" style="margin-top: 20px;">
+            <h3>🌬️ Fresh Air Requirements Analysis</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h4 style="color: #2c3e50; margin-bottom: 10px;">ASHRAE 62.1 Requirements:</h4>
+                    <div id="freshAirBreakdown" style="background: #f8f9fa; padding: 15px; border-radius: 8px; font-size: 0.9em;">
+                        <div>Rp (per person): <span id="rpValue">-</span> <span id="rpUnit">L/s</span></div>
+                        <div>Ra (per area): <span id="raValue">-</span> <span id="raUnit">L/s</span></div>
+                        <div style="border-top: 1px solid #dee2e6; margin-top: 8px; padding-top: 8px; font-weight: bold;">
+                            Total Required: <span id="totalRequired">-</span> <span id="totalReqUnit">L/s</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h4 style="color: #2c3e50; margin-bottom: 10px;">CO2 Generation Analysis:</h4>
+                    <div id="co2Analysis" style="background: #f8f9fa; padding: 15px; border-radius: 8px; font-size: 0.9em;">
+                        <div>Per person: <span id="co2PerPerson">-</span> mL/s</div>
+                        <div>Total generation: <span id="totalCO2Gen">-</span> mL/s</div>
+                        <div style="border-top: 1px solid #dee2e6; margin-top: 8px; padding-top: 8px; font-weight: bold;">
+                            For target CO2: <span id="requiredForTarget">-</span> <span id="targetReqUnit">L/s</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <button class="calculate-btn" onclick="calculate()">🧮 คำนวณ Fresh Air Requirements & CO2 Analysis (Auto-Calculate)</button>
+        
+        <div class="results-section" id="results" style="display: none;">
+            <h3>📊 ผลการคำนวณ (Calculation Results)</h3>
+            <div class="results-grid">
+                <div class="result-card">
+                    <h4>Recommended OA Rate</h4>
+                    <div class="value" id="recommendedOA">-</div>
+                    <div class="unit" id="resultOAUnit">L/s</div>
+                </div>
+                
+                <div class="result-card">
+                    <h4>ASHRAE 62.1 Minimum</h4>
+                    <div class="value" id="requiredOA">-</div>
+                    <div class="unit" id="resultOAUnit2">L/s</div>
+                </div>
+                
+                <div class="result-card">
+                    <h4>CO2-based Minimum</h4>
+                    <div class="value" id="co2BasedOA">-</div>
+                    <div class="unit" id="resultOAUnit3">L/s</div>
+                </div>
+                
+                <div class="result-card">
+                    <h4>Resulting Indoor CO2</h4>
+                    <div class="value" id="indoorCO2">-</div>
+                    <div class="unit">ppm</div>
+                </div>
+                
+                <div class="result-card">
+                    <h4>Total CO2 Generation</h4>
+                    <div class="value" id="co2Generation">-</div>
+                    <div class="unit">mL/s</div>
+                </div>
+                
+                <div class="result-card">
+                    <h4>Air Changes per Hour</h4>
+                    <div class="value" id="airChanges">-</div>
+                    <div class="unit">ACH</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-section">
+            <h4>📋 ASHRAE 62.1-2022 Calculator v1.0.0 - LITE Edition</h4>
+            <ul>
+                <li><strong>Professional Reports:</strong> 📄 Generate comprehensive calculation reports with project details</li>
+                <li><strong>Export Options:</strong> 📈 CSV export (LITE) | 📄 PDF, Excel, Word (PRO upgrade)</li>
+                <li><strong>Dual Unit System:</strong> SI (เมตริก) และ I-P (อิมพีเรียล) สำหรับความสะดวกในการใช้งาน</li>
+                <li><strong>Recommended OA:</strong> ระบบเลือกค่าที่สูงกว่าระหว่าง ASHRAE 62.1 และ CO2-based requirements</li>
+                <li><strong>ASHRAE 62.1 Compliance:</strong> ตาม Table 6.2.2.1 พร้อมการคำนวณ Rp + Ra</li>
+                <li><strong>Mobile Responsive:</strong> ใช้งานได้ทั้งคอมพิวเตอร์และมือถือ</li>
+                <li><strong>Color Coding:</strong> 🟢 ≤800ppm ดีเยี่ยม | 🟡 ≤1000ppm ดี | 🟠 ≤1200ppm พอใช้ | 🔴 >1200ppm ปรับปรุง</li>
+                <li><strong>LITE Features:</strong> การคำนวณพื้นฐาน, 40+ ประเภทพื้นที่, Unit Conversion, Report Preview</li>
+                <li><strong>PRO Upgrade:</strong> 💼 PDF Reports, Excel Charts, Multi-zone, API Access, Team Collaboration</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Global unit system
+        let currentUnit = 'SI'; // Default to SI units
+        
+        // Unit conversion factors
+        const conversions = {
+            length: 3.28084,     // m to ft
+            area: 10.7639,       // m² to ft²
+            volume: 35.3147,     // m³ to ft³
+            airflow: 2.11888,    // L/s to CFM
+            height: 3.28084      // m to ft
+        };
+        
+        // Toggle between SI and I-P units
+        function toggleUnit(unit) {
+            currentUnit = unit;
+            
+            // Update button states
+            document.getElementById('siBtn').classList.toggle('active', unit === 'SI');
+            document.getElementById('ipBtn').classList.toggle('active', unit === 'IP');
+            
+            // Update all unit labels
+            updateUnitLabels();
+            
+            // Convert existing values
+            convertInputValues();
+            
+            // Recalculate with new units
+            calculate();
+        }
+        
+        function updateUnitLabels() {
+            if (currentUnit === 'SI') {
+                // SI units
+                document.getElementById('widthUnit').textContent = 'm';
+                document.getElementById('lengthUnit').textContent = 'm';
+                document.getElementById('areaUnit').textContent = 'm²';
+                document.getElementById('heightUnit').textContent = 'm';
+                document.getElementById('oaUnit').textContent = 'L/s';
+                document.getElementById('resultOAUnit').textContent = 'L/s';
+                document.getElementById('resultOAUnit2').textContent = 'L/s';
+                document.getElementById('resultOAUnit3').textContent = 'L/s';
+                document.getElementById('rpUnit').textContent = 'L/s';
+                document.getElementById('raUnit').textContent = 'L/s';
+                document.getElementById('totalReqUnit').textContent = 'L/s';
+                document.getElementById('targetReqUnit').textContent = 'L/s';
+            } else {
+                // I-P units
+                document.getElementById('widthUnit').textContent = 'ft';
+                document.getElementById('lengthUnit').textContent = 'ft';
+                document.getElementById('areaUnit').textContent = 'ft²';
+                document.getElementById('heightUnit').textContent = 'ft';
+                document.getElementById('oaUnit').textContent = 'CFM';
+                document.getElementById('resultOAUnit').textContent = 'CFM';
+                document.getElementById('resultOAUnit2').textContent = 'CFM';
+                document.getElementById('resultOAUnit3').textContent = 'CFM';
+                document.getElementById('rpUnit').textContent = 'CFM';
+                document.getElementById('raUnit').textContent = 'CFM';
+                document.getElementById('totalReqUnit').textContent = 'CFM';
+                document.getElementById('targetReqUnit').textContent = 'CFM';
+            }
+        }
+        
+        function convertInputValues() {
+            const widthInput = document.getElementById('width');
+            const lengthInput = document.getElementById('length');
+            const heightInput = document.getElementById('ceilingHeight');
+            const oaInput = document.getElementById('overrideOAValue');
+            
+            if (currentUnit === 'IP') {
+                // Convert SI to I-P
+                widthInput.value = (parseFloat(widthInput.value) * conversions.length).toFixed(1);
+                lengthInput.value = (parseFloat(lengthInput.value) * conversions.length).toFixed(1);
+                heightInput.value = (parseFloat(heightInput.value) * conversions.height).toFixed(1);
+                oaInput.value = Math.round(parseFloat(oaInput.value) * conversions.airflow);
+                
+                // Update step values for I-P
+                widthInput.step = "0.5";
+                lengthInput.step = "0.5";
+                heightInput.step = "0.5";
+                oaInput.step = "50";
+            } else {
+                // Convert I-P to SI
+                widthInput.value = (parseFloat(widthInput.value) / conversions.length).toFixed(1);
+                lengthInput.value = (parseFloat(lengthInput.value) / conversions.length).toFixed(1);
+                heightInput.value = (parseFloat(heightInput.value) / conversions.height).toFixed(1);
+                oaInput.value = Math.round(parseFloat(oaInput.value) / conversions.airflow);
+                
+                // Restore step values for SI
+                widthInput.step = "0.1";
+                lengthInput.step = "0.1";
+                heightInput.step = "0.1";
+                oaInput.step = "10";
+            }
+            
+            updateArea();
+        }
+        const spaceTypes = {
+            // Educational Facilities
+            classroom_age3to5: { perPerson: 3.8, perArea: 0.3, description: "ห้องเรียน 3-5 ปี (Classroom Age 3-5)" },
+            classroom_age6plus: { perPerson: 3.8, perArea: 0.3, description: "ห้องเรียน 6+ ปี (Classroom Age 6+)" },
+            lecture_hall: { perPerson: 3.8, perArea: 0.6, description: "หอบรรยาย (Lecture Hall)" },
+            library: { perPerson: 2.5, perArea: 0.6, description: "ห้องสมุด (Library)" },
+            
+            // Food and Beverage Service
+            restaurant_dining: { perPerson: 7.5, perArea: 0.9, description: "ห้องอาหาร (Restaurant Dining)" },
+            cafeteria: { perPerson: 3.8, perArea: 0.6, description: "โรงอาหาร (Cafeteria)" },
+            kitchen_commercial: { perPerson: 7.5, perArea: 0.6, description: "ครัวพาณิชย์ (Commercial Kitchen)" },
+            bar_lounge: { perPerson: 7.5, perArea: 0.9, description: "บาร์/ลาวน์จ (Bar/Lounge)" },
+            
+            // General
+            break_room: { perPerson: 2.5, perArea: 0.6, description: "ห้องพัก (Break Room)" },
+            corridor: { perPerson: 0, perArea: 0.06, description: "ทางเดิน (Corridor)" },
+            storage: { perPerson: 0, perArea: 0.06, description: "ห้องเก็บของ (Storage)" },
+            
+            // Hotels, Motels, Resorts, Dormitories
+            hotel_bedroom: { perPerson: 2.5, perArea: 0.3, description: "ห้องนอนโรงแรม (Hotel Bedroom)" },
+            hotel_lobby: { perPerson: 2.5, perArea: 0.9, description: "ล็อบบี้โรงแรม (Hotel Lobby)" },
+            dormitory_bedroom: { perPerson: 2.5, perArea: 0.3, description: "ห้องนอนหอพัก (Dormitory Bedroom)" },
+            
+            // Office Buildings
+            office_space: { perPerson: 2.5, perArea: 0.3, description: "พื้นที่สำนักงาน (Office Space)" },
+            conference_room: { perPerson: 2.5, perArea: 0.3, description: "ห้องประชุม (Conference Room)" },
+            reception: { perPerson: 2.5, perArea: 0.3, description: "แผนกต้อนรับ (Reception)" },
+            telephone_closet: { perPerson: 2.5, perArea: 0.3, description: "ห้องโทรศัพท์ (Telephone Closet)" },
+            
+            // Public Assembly Spaces
+            auditorium: { perPerson: 2.5, perArea: 0.3, description: "หอประชุม (Auditorium)" },
+            church_chapel: { perPerson: 2.5, perArea: 0.3, description: "โบสถ์/วิหาร (Church/Chapel)" },
+            courtroom: { perPerson: 2.5, perArea: 0.3, description: "ศาลา (Courtroom)" },
+            legislative_chamber: { perPerson: 2.5, perArea: 0.9, description: "ห้องสภา (Legislative Chamber)" },
+            library_public: { perPerson: 2.5, perArea: 0.6, description: "ห้องสมุดสาธารณะ (Public Library)" },
+            museum: { perPerson: 3.8, perArea: 0.6, description: "พิพิธภัณฑ์ (Museum)" },
+            
+            // Retail
+            retail_sales: { perPerson: 3.8, perArea: 0.6, description: "ร้านค้าปลีก (Retail Sales)" },
+            supermarket: { perPerson: 3.8, perArea: 0.6, description: "ซุปเปอร์มาร์เก็ต (Supermarket)" },
+            mall_common: { perPerson: 3.8, perArea: 0.6, description: "ศูนย์การค้า-พื้นที่รวม (Mall Common)" },
+            barber_shop: { perPerson: 7.5, perArea: 0.6, description: "ร้านตัดผม (Barber Shop)" },
+            beauty_salon: { perPerson: 10, perArea: 0.6, description: "ร้านเสริมสวย (Beauty Salon)" },
+            
+            // Sports and Entertainment
+            disco_dance: { perPerson: 10, perArea: 0.9, description: "ดิสโก้/เต้นรำ (Disco/Dance)" },
+            health_club_aerobics: { perPerson: 10, perArea: 0.6, description: "ฟิตเนส/แอโรบิค (Health Club/Aerobics)" },
+            health_club_weight: { perPerson: 10, perArea: 0.6, description: "ฟิตเนส/ยกน้ำหนัก (Health Club/Weight)" },
+            bowling_alley: { perPerson: 5, perArea: 0.9, description: "โบว์ลิ่ง (Bowling Alley)" },
+            gambling_casino: { perPerson: 15, perArea: 0.9, description: "คาสิโน (Gambling Casino)" },
+            gymnasium: { perPerson: 7.5, perArea: 0.3, description: "โรงยิม (Gymnasium)" },
+            spectator_areas: { perPerson: 3.8, perArea: 0.3, description: "ที่นั่งผู้ชม (Spectator Areas)" },
+            swimming_pools: { perPerson: 7.5, perArea: 0.6, description: "สระว่ายน้ำ (Swimming Pools)" },
+            
+            // Transportation
+            transportation_platform: { perPerson: 3.8, perArea: 0.3, description: "ชานชาลา (Transportation Platform)" },
+            transportation_waiting: { perPerson: 3.8, perArea: 0.3, description: "ห้องรอขนส่ง (Transportation Waiting)" },
+            
+            // Medical Facilities
+            patient_room: { perPerson: 12.5, perArea: 0.3, description: "ห้องผู้ป่วย (Patient Room)" },
+            operating_room: { perPerson: 15, perArea: 0.9, description: "ห้องผ่าตัด (Operating Room)" },
+            
+            // Miscellaneous
+            bank_vault: { perPerson: 2.5, perArea: 0.3, description: "ห้องนิรภัยธนาคาร (Bank Vault)" },
+            computer_room: { perPerson: 2.5, perArea: 0.3, description: "ห้องคอมพิวเตอร์ (Computer Room)" },
+            pharmacy: { perPerson: 7.5, perArea: 0.9, description: "ร้านขายยา (Pharmacy)" },
+            photo_studio: { perPerson: 2.5, perArea: 0.6, description: "สตูดิโอถ่ายรูป (Photo Studio)" }
+        };
+        
+        // CO2 generation rates by activity level (L/s per person)
+        const activityLevels = {
+            sedentary: 0.0052,    // นั่งทำงาน
+            light: 0.0070,        // งานเบา
+            moderate: 0.0100,     // งานปานกลาง
+            heavy: 0.0150         // งานหนัก
+        };
+        
+        function updateArea() {
+            const width = parseFloat(document.getElementById('width').value) || 0;
+            const length = parseFloat(document.getElementById('length').value) || 0;
+            let area = width * length;
+            
+            // Display area in current units
+            if (currentUnit === 'SI') {
+                document.getElementById('calculatedArea').value = area.toFixed(1);
+            } else {
+                document.getElementById('calculatedArea').value = area.toFixed(0);
+            }
+        }
+        
+        // ASHRAE 62.1 Table 6.2.2.1 Outdoor Air Requirements (L/s per person and L/s per m²)
+        
+        function calculate() {
+            // Get input values
+            const spaceType = document.getElementById('spaceType').value;
+            let width = parseFloat(document.getElementById('width').value);
+            let length = parseFloat(document.getElementById('length').value);
+            let ceilingHeight = parseFloat(document.getElementById('ceilingHeight').value);
+            const occupancy = parseInt(document.getElementById('occupancy').value);
+            const targetCO2 = parseFloat(document.getElementById('targetCO2').value);
+            const outdoorCO2 = parseFloat(document.getElementById('outdoorCO2').value);
+            const ventilationEff = parseFloat(document.getElementById('ventilationEff').value);
+            const activityLevel = document.getElementById('activityLevel').value;
+            const overrideOA = document.getElementById('overrideOA').checked;
+            let overrideOAValue = parseFloat(document.getElementById('overrideOAValue').value);
+            
+            // Convert I-P to SI for calculations (calculations are always in SI)
+            if (currentUnit === 'IP') {
+                width = width / conversions.length;
+                length = length / conversions.length;
+                ceilingHeight = ceilingHeight / conversions.height;
+                overrideOAValue = overrideOAValue / conversions.airflow;
+            }
+            
+            // Calculate in SI units
+            const floorArea = width * length; // m²
+            const roomVolume = floorArea * ceilingHeight; // m³
+            
+            // Calculate CO2 generation rate
+            const co2GenPerPerson = activityLevels[activityLevel];
+            const totalCO2Generation = occupancy * co2GenPerPerson;
+            
+            // Calculate ASHRAE 62.1 required outdoor air breakdown
+            const spaceData = spaceTypes[spaceType];
+            const rpComponent = occupancy * spaceData.perPerson; // People component (L/s)
+            const raComponent = floorArea * spaceData.perArea;   // Area component (L/s)
+            const ashrae621RequiredOA = rpComponent + raComponent;   // Total ASHRAE 62.1 requirement (L/s)
+            
+            // Calculate CO2-based outdoor air requirement for target CO2
+            const co2BasedRequiredOA = (totalCO2Generation * 1000000) / (targetCO2 - outdoorCO2);
+            
+            // Determine recommended OA (use the higher of ASHRAE 62.1 or CO2-based)
+            const recommendedOA = Math.max(ashrae621RequiredOA, co2BasedRequiredOA);
+            
+            // Use override value if enabled, otherwise use recommended
+            const designOA = overrideOA ? overrideOAValue : recommendedOA;
+            
+            // Calculate resulting indoor CO2 concentration
+            const effectiveOA = designOA * ventilationEff;
+            const resultingIndoorCO2 = outdoorCO2 + (totalCO2Generation * 1000000) / effectiveOA;
+            
+            // Calculate air changes per hour
+            const airChangesPerHour = (designOA * 3.6) / roomVolume;
+            
+            // Convert results to display units
+            let displayValues = {
+                rpComponent: rpComponent,
+                raComponent: raComponent,
+                ashrae621RequiredOA: ashrae621RequiredOA,
+                co2BasedRequiredOA: co2BasedRequiredOA,
+                recommendedOA: recommendedOA
+            };
+            
+            if (currentUnit === 'IP') {
+                displayValues.rpComponent *= conversions.airflow;
+                displayValues.raComponent *= conversions.airflow;
+                displayValues.ashrae621RequiredOA *= conversions.airflow;
+                displayValues.co2BasedRequiredOA *= conversions.airflow;
+                displayValues.recommendedOA *= conversions.airflow;
+            }
+            
+            // Update Fresh Air Breakdown
+            document.getElementById('rpValue').textContent = (displayValues.rpComponent).toFixed(1);
+            document.getElementById('raValue').textContent = (displayValues.raComponent).toFixed(1);
+            document.getElementById('totalRequired').textContent = Math.round(displayValues.ashrae621RequiredOA);
+            
+            // Update CO2 Analysis
+            document.getElementById('co2PerPerson').textContent = (co2GenPerPerson * 1000).toFixed(2);
+            document.getElementById('totalCO2Gen').textContent = (totalCO2Generation * 1000).toFixed(2);
+            document.getElementById('requiredForTarget').textContent = Math.round(currentUnit === 'IP' ? displayValues.co2BasedRequiredOA : co2BasedRequiredOA);
+            
+            // Display main results
+            document.getElementById('recommendedOA').textContent = Math.round(displayValues.recommendedOA);
+            document.getElementById('requiredOA').textContent = Math.round(displayValues.ashrae621RequiredOA);
+            document.getElementById('co2BasedOA').textContent = Math.round(displayValues.co2BasedRequiredOA);
+            document.getElementById('indoorCO2').textContent = Math.round(resultingIndoorCO2);
+            document.getElementById('co2Generation').textContent = (totalCO2Generation * 1000).toFixed(2);
+            document.getElementById('airChanges').textContent = airChangesPerHour.toFixed(1);
+            
+            // Color code the recommended OA based on which requirement is driving
+            const recommendedOAElement = document.getElementById('recommendedOA');
+            if (recommendedOA === ashrae621RequiredOA && recommendedOA === co2BasedRequiredOA) {
+                recommendedOAElement.style.color = "#3498db"; // Blue - both equal
+            } else if (recommendedOA === ashrae621RequiredOA) {
+                recommendedOAElement.style.color = "#e67e22"; // Orange - ASHRAE driving
+            } else {
+                recommendedOAElement.style.color = "#e74c3c"; // Red - CO2 driving
+            }
+            
+            // Color code indoor CO2 based on quality
+            const indoorCO2Element = document.getElementById('indoorCO2');
+            if (resultingIndoorCO2 <= 800) {
+                indoorCO2Element.style.color = "#27ae60"; // Green - Excellent
+            } else if (resultingIndoorCO2 <= 1000) {
+                indoorCO2Element.style.color = "#f39c12"; // Yellow - Good
+            } else if (resultingIndoorCO2 <= 1200) {
+                indoorCO2Element.style.color = "#e67e22"; // Orange - Acceptable
+            } else {
+                indoorCO2Element.style.color = "#e74c3c"; // Red - Poor
+            }
+            
+            // Show results section
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('reportSection').style.display = 'block';
+            
+            // Smooth scroll to results
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Report Generation Functions
+        function generateReport() {
+            const reportContent = document.getElementById('reportContent');
+            const currentDate = new Date().toLocaleDateString('th-TH', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            // Get current calculation data
+            const spaceType = document.getElementById('spaceType').value;
+            const spaceData = spaceTypes[spaceType];
+            const width = parseFloat(document.getElementById('width').value);
+            const length = parseFloat(document.getElementById('length').value);
+            const occupancy = parseInt(document.getElementById('occupancy').value);
+            const ceilingHeight = parseFloat(document.getElementById('ceilingHeight').value);
+            const targetCO2 = parseFloat(document.getElementById('targetCO2').value);
+            const outdoorCO2 = parseFloat(document.getElementById('outdoorCO2').value);
+            const activityLevel = document.getElementById('activityLevel').value;
+            
+            // Calculate area
+            let area = width * length;
+            if (currentUnit === 'IP') {
+                // Convert back to SI for display
+                area = (width / conversions.length) * (length / conversions.length);
+            }
+            
+            const unitLabels = currentUnit === 'SI' ? 
+                { length: 'm', area: 'm²', airflow: 'L/s' } : 
+                { length: 'ft', area: 'ft²', airflow: 'CFM' };
+            
+            reportContent.innerHTML = `
+                <div class="report-header">
+                    <div class="report-title">ASHRAE 62.1 Ventilation Analysis Report</div>
+                    <div class="report-subtitle">Fresh Air Requirements & CO2 Calculation</div>
+                </div>
+                
+                <div class="report-meta">
+                    <div>
+                        <strong>Project Date:</strong> ${currentDate}<br>
+                        <strong>Report Version:</strong> 1.0.0 LITE<br>
+                        <strong>Standard:</strong> ASHRAE 62.1-2022
+                    </div>
+                    <div>
+                        <strong>Unit System:</strong> ${currentUnit} (${currentUnit === 'SI' ? 'เมตริก' : 'อิมพีเรียล'})<br>
+                        <strong>Calculation Method:</strong> Fresh Air + CO2 Analysis<br>
+                        <strong>Generated By:</strong> HVAC Calculator LITE
+                    </div>
+                </div>
+                
+                <div class="report-section-title">📋 Project Input Parameters</div>
+                <table class="report-table">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Value</th>
+                            <th>Unit</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Space Type</td>
+                            <td>${spaceData.description}</td>
+                            <td>-</td>
+                            <td>According to ASHRAE 62.1 Table 6.2.2.1</td>
+                        </tr>
+                        <tr>
+                            <td>Room Width</td>
+                            <td>${width.toFixed(1)}</td>
+                            <td>${unitLabels.length}</td>
+                            <td>Internal dimension</td>
+                        </tr>
+                        <tr>
+                            <td>Room Length</td>
+                            <td>${length.toFixed(1)}</td>
+                            <td>${unitLabels.length}</td>
+                            <td>Internal dimension</td>
+                        </tr>
+                        <tr>
+                            <td>Floor Area</td>
+                            <td>${currentUnit === 'SI' ? area.toFixed(1) : (area * conversions.area).toFixed(0)}</td>
+                            <td>${unitLabels.area}</td>
+                            <td>Calculated from width × length</td>
+                        </tr>
+                        <tr>
+                            <td>Ceiling Height</td>
+                            <td>${ceilingHeight.toFixed(1)}</td>
+                            <td>${unitLabels.length}</td>
+                            <td>Internal height</td>
+                        </tr>
+                        <tr>
+                            <td>Occupancy</td>
+                            <td>${occupancy}</td>
+                            <td>persons</td>
+                            <td>Design occupancy level</td>
+                        </tr>
+                        <tr>
+                            <td>Target CO2</td>
+                            <td>${targetCO2}</td>
+                            <td>ppm</td>
+                            <td>Indoor air quality target</td>
+                        </tr>
+                        <tr>
+                            <td>Outdoor CO2</td>
+                            <td>${outdoorCO2}</td>
+                            <td>ppm</td>
+                            <td>Ambient CO2 concentration</td>
+                        </tr>
+                        <tr>
+                            <td>Activity Level</td>
+                            <td>${activityLevels[activityLevel] * 1000} mL/s·person</td>
+                            <td>-</td>
+                            <td>CO2 generation rate per person</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="report-section-title">🌬️ ASHRAE 62.1 Fresh Air Analysis</div>
+                <table class="report-table">
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>Rate</th>
+                            <th>Calculation</th>
+                            <th>Result</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Rp (People Component)</td>
+                            <td>${spaceData.perPerson} L/s·person</td>
+                            <td>${occupancy} × ${spaceData.perPerson}</td>
+                            <td>${document.getElementById('rpValue').textContent} ${currentUnit === 'SI' ? 'L/s' : 'CFM'}</td>
+                        </tr>
+                        <tr>
+                            <td>Ra (Area Component)</td>
+                            <td>${spaceData.perArea} L/s·m²</td>
+                            <td>${area.toFixed(1)} × ${spaceData.perArea}</td>
+                            <td>${document.getElementById('raValue').textContent} ${currentUnit === 'SI' ? 'L/s' : 'CFM'}</td>
+                        </tr>
+                        <tr style="background-color: #e3f2fd; font-weight: bold;">
+                            <td>Total ASHRAE 62.1</td>
+                            <td>Rp + Ra</td>
+                            <td>Required Outdoor Air</td>
+                            <td>${document.getElementById('requiredOA').textContent} ${unitLabels.airflow}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="report-section-title">🏭 CO2 Generation & Analysis</div>
+                <table class="report-table">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Value</th>
+                            <th>Unit</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>CO2 Generation per Person</td>
+                            <td>${document.getElementById('co2PerPerson').textContent}</td>
+                            <td>mL/s</td>
+                            <td>Based on activity level</td>
+                        </tr>
+                        <tr>
+                            <td>Total CO2 Generation</td>
+                            <td>${document.getElementById('totalCO2Gen').textContent}</td>
+                            <td>mL/s</td>
+                            <td>All occupants combined</td>
+                        </tr>
+                        <tr>
+                            <td>CO2-based OA Requirement</td>
+                            <td>${document.getElementById('co2BasedOA').textContent}</td>
+                            <td>${unitLabels.airflow}</td>
+                            <td>For target CO2 level</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="report-section-title">📊 Final Design Recommendations</div>
+                <table class="report-table">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Value</th>
+                            <th>Unit</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background-color: #d4edda;">
+                            <td><strong>Recommended OA Rate</strong></td>
+                            <td><strong>${document.getElementById('recommendedOA').textContent}</strong></td>
+                            <td><strong>${unitLabels.airflow}</strong></td>
+                            <td><strong>Design Value</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Resulting Indoor CO2</td>
+                            <td>${document.getElementById('indoorCO2').textContent}</td>
+                            <td>ppm</td>
+                            <td>${parseInt(document.getElementById('indoorCO2').textContent) <= 1000 ? '✅ Good' : '⚠️ Review'}</td>
+                        </tr>
+                        <tr>
+                            <td>Air Changes per Hour</td>
+                            <td>${document.getElementById('airChanges').textContent}</td>
+                            <td>ACH</td>
+                            <td>Calculated</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="report-section-title">📝 Design Notes & Recommendations</div>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #667eea;">
+                    <ul style="margin: 0; padding-left: 20px;">
+                        <li><strong>Governing Requirement:</strong> ${parseInt(document.getElementById('co2BasedOA').textContent) > parseInt(document.getElementById('requiredOA').textContent) ? 'CO2-based calculation governs due to high occupancy density' : 'ASHRAE 62.1 minimum requirements govern'}</li>
+                        <li><strong>Occupancy Density:</strong> ${(area/occupancy).toFixed(1)} ${unitLabels.area}/person ${area/occupancy < 10 ? '(High density - consider DCV)' : '(Normal density)'}</li>
+                        <li><strong>Energy Impact:</strong> Outdoor air represents significant cooling/heating load</li>
+                        <li><strong>Controls:</strong> ${parseInt(document.getElementById('co2BasedOA').textContent) > parseInt(document.getElementById('requiredOA').textContent) ? 'Recommend CO2-based demand controlled ventilation (DCV)' : 'Standard ventilation controls adequate'}</li>
+                        <li><strong>IAQ Performance:</strong> Design achieves target CO2 level of ${targetCO2} ppm</li>
+                    </ul>
+                </div>
+                
+                <div class="watermark">
+                    <div>Generated by ASHRAE 62.1 Calculator v1.0.0 - LITE Edition</div>
+                    <div style="font-size: 0.9em; margin-top: 5px;">Professional features available in PRO version</div>
+                </div>
+            `;
+            
+            // Show modal
+            document.getElementById('reportModal').style.display = 'block';
+        }
+        
+        function closeReport() {
+            document.getElementById('reportModal').style.display = 'none';
+        }
+        
+        function exportToPDF() {
+            // For LITE version - show upgrade message
+            alert('📄 PDF Export\n\nThis feature is available in the PRO version.\n\n✅ Professional PDF reports\n✅ Custom branding\n✅ Multi-project management\n\nContact us to upgrade!');
+        }
+        
+        function exportToExcel() {
+            // For LITE version - create simple CSV export
+            const data = [
+                ['ASHRAE 62.1 Calculation Report - LITE Version'],
+                [''],
+                ['Input Parameters'],
+                ['Space Type', document.getElementById('spaceType').selectedOptions[0].text],
+                ['Width', document.getElementById('width').value, currentUnit === 'SI' ? 'm' : 'ft'],
+                ['Length', document.getElementById('length').value, currentUnit === 'SI' ? 'm' : 'ft'],
+                ['Area', document.getElementById('calculatedArea').value, currentUnit === 'SI' ? 'm²' : 'ft²'],
+                ['Occupancy', document.getElementById('occupancy').value, 'persons'],
+                ['Ceiling Height', document.getElementById('ceilingHeight').value, currentUnit === 'SI' ? 'm' : 'ft'],
+                ['Target CO2', document.getElementById('targetCO2').value, 'ppm'],
+                [''],
+                ['Results'],
+                ['ASHRAE 62.1 Minimum', document.getElementById('requiredOA').textContent, currentUnit === 'SI' ? 'L/s' : 'CFM'],
+                ['CO2-based Minimum', document.getElementById('co2BasedOA').textContent, currentUnit === 'SI' ? 'L/s' : 'CFM'],
+                ['Recommended OA', document.getElementById('recommendedOA').textContent, currentUnit === 'SI' ? 'L/s' : 'CFM'],
+                ['Resulting CO2', document.getElementById('indoorCO2').textContent, 'ppm'],
+                ['Air Changes/Hour', document.getElementById('airChanges').textContent, 'ACH'],
+                [''],
+                ['Generated by HVAC Calculator LITE v1.0.0']
+            ];
+            
+            let csvContent = data.map(row => row.join(',')).join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('hidden', '');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'HVAC_Calculation_Report.csv');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+            alert('📈 Excel Export (CSV)\n\nBasic CSV export completed!\n\nPRO version includes:\n✅ Full Excel formatting\n✅ Charts & graphs\n✅ Multiple sheets\n✅ Formulas & calculations');
+        }
+        
+        function exportToWord() {
+            // For LITE version - create simple text export
+            const reportContent = document.getElementById('reportContent').innerText;
+            const blob = new Blob([reportContent], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('hidden', '');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'HVAC_Report.txt');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+            alert('📝 Word Export (Text)\n\nBasic text export completed!\n\nPRO version includes:\n✅ Professional Word formatting\n✅ Company letterhead\n✅ Technical diagrams\n✅ Calculation appendix');
+        }
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('reportModal');
+            if (event.target === modal) {
+                closeReport();
+            }
+        }
+        
+        // Calculate on page load
+        window.onload = function() {
+            updateUnitLabels(); // Initialize unit labels
+            updateArea(); // Update area calculation
+            calculate();
+            
+            // Add event listeners for automatic area calculation
+            document.getElementById('width').addEventListener('input', function() {
+                updateArea();
+                calculate();
+            });
+            
+            document.getElementById('length').addEventListener('input', function() {
+                updateArea();
+                calculate();
+            });
+            
+            // Add event listeners for other inputs to auto-recalculate
+            document.getElementById('occupancy').addEventListener('input', calculate);
+            document.getElementById('ceilingHeight').addEventListener('input', calculate);
+            document.getElementById('targetCO2').addEventListener('input', calculate);
+            document.getElementById('outdoorCO2').addEventListener('input', calculate);
+            document.getElementById('ventilationEff').addEventListener('input', calculate);
+            document.getElementById('spaceType').addEventListener('change', calculate);
+            document.getElementById('activityLevel').addEventListener('change', calculate);
+            
+            // Add event listeners for override functionality
+            document.getElementById('overrideOA').addEventListener('change', function() {
+                const overrideGroup = document.getElementById('overrideOAGroup');
+                if (this.checked) {
+                    overrideGroup.style.display = 'block';
+                } else {
+                    overrideGroup.style.display = 'none';
+                }
+                calculate();
+            });
+            
+            document.getElementById('overrideOAValue').addEventListener('input', calculate);
+        };
+    </script>
+</body>
+</html>
