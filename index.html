@@ -103,6 +103,13 @@
             .header h1 {
                 font-size: 1.8em;
             }
+            
+            /* Responsive breakdown grid */
+            .input-section div[style*="grid-template-columns: 1fr 1fr 1fr"] {
+                display: grid !important;
+                grid-template-columns: 1fr !important;
+                gap: 15px !important;
+            }
         }
 
         .report-section {
@@ -653,6 +660,10 @@
                     <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #2c3e50;">
                         <h4 style="color: #667eea; margin-bottom: 15px;">📋 ASHRAE 62.1-2022 Calculator v1.1.0 - LITE Edition</h4>
                         <ul style="padding-left: 20px; margin-bottom: 25px;">
+                            <li><strong>Updated Space Types:</strong> ตามเอกสาร ASHRAE Standard 62.1 (Calculations-of-Ventilation-Rate)</li>
+                            <li><strong>Occupant Density Guide:</strong> แสดงค่าแนะนำจำนวนคนตามประเภทห้อง (คน/100m²)</li>
+                            <li><strong>Combined Outdoor Rate:</strong> แสดงค่า Combined OA Rate ตามมาตรฐาน (L/s·person)</li>
+                            <li><strong>Air Class Rating:</strong> ระบุระดับคุณภาพอากาศ (1=ดีที่สุด, 2=ปานกลาง, 3=พิเศษ)</li>
                             <li><strong>CO2 Calculation:</strong> ASHRAE 62.1-2022 Appendix C: CR = COA + (8400 × Ez × m) / (Rp + Ra × Az/Pz)</li>
                             <li><strong>Metabolic Rate:</strong> 1.0 met (Sedentary), 1.2 met (Light), 2.0 met (Moderate), 3.0 met (Heavy)</li>
                             <li><strong>Standards Reference:</strong> EN 16798-1, WHO, ASHRAE, LEED v4.1, WELL Building</li>
@@ -753,18 +764,32 @@
                 <div class="form-group">
                     <label for="spaceType">ประเภทพื้นที่ (Space Type):</label>
                     <select id="spaceType">
+                        <optgroup label="🏛️ ทัณฑสถาน (Correctional Facilities)">
+                            <option value="cell">ห้องคุมขังนักโทษ (Cell)</option>
+                            <option value="dayroom">ห้องกิจกรรมการ (Dayroom)</option>
+                            <option value="guard_stations">ห้องยาม (Guard Stations)</option>
+                            <option value="booking_waiting">ห้องรอ (Booking/Waiting)</option>
+                        </optgroup>
+                        
                         <optgroup label="📚 สถานศึกษา (Educational Facilities)">
-                            <option value="classroom_age3to5">ห้องเรียน 3-5 ปี (Classroom Age 3-5)</option>
-                            <option value="classroom_age6plus">ห้องเรียน 6+ ปี (Classroom Age 6+)</option>
-                            <option value="lecture_hall">หอบรรยาย (Lecture Hall)</option>
-                            <option value="library">ห้องสมุด (Library)</option>
+                            <option value="daycare_age4">ศูนย์รับราชเด็กเล็ก อายุ 4 ขวบ (Daycare through age 4)</option>
+                            <option value="daycare_sickroom">ห้องเด็กป่วยในศูนย์รับราชเด็กเล็ก (Daycare Sickroom)</option>
+                            <option value="classroom_age5to8">ห้องเรียน อายุ 5-8 ปี (Classrooms ages 5-8)</option>
+                            <option value="classroom_age9plus">ห้องเรียน อายุตั้งแต่ 9 ขึ้นไป (Classrooms age 9 plus)</option>
+                            <option value="lecture_classroom">ห้องเรียนบรรยายขนาดใหญ่ (Lecture Classroom)</option>
+                            <option value="lecture_hall_fixed">หอประชุมบรรยายขนาดใหญ่ (Lecture Hall Fixed Seats)</option>
+                            <option value="art_classroom">ห้องเรียนศิลปะ (Art Classroom)</option>
+                            <option value="science_laboratories">ห้องปฏิบัติการทางวิทยาศาสตร์ (Science Laboratories)</option>
+                            <option value="university_laboratories">ห้องปฏิบัติการในมหาวิทยาลัย (University/College Laboratories)</option>
+                            <option value="wood_metal_shop">ห้องปฏิบัติการช่างไม้โลหะ (Wood/Metal Shop)</option>
+                            <option value="computer_lab">ห้องปฏิบัติการคอมพิวเตอร์ (Computer Lab)</option>
+                            <option value="media_center">ศูนย์สื่อ (Media Center)</option>
                         </optgroup>
                         
                         <optgroup label="🏢 สำนักงาน (Office Buildings)">
                             <option value="office_space" selected>พื้นที่สำนักงาน (Office Space)</option>
                             <option value="conference_room">ห้องประชุม (Conference Room)</option>
                             <option value="reception">แผนกต้อนรับ (Reception)</option>
-                            <option value="telephone_closet">ห้องโทรศัพท์ (Telephone Closet)</option>
                         </optgroup>
                         
                         <optgroup label="🍽️ อาหารและเครื่องดื่ม (Food & Beverage)">
@@ -777,55 +802,6 @@
                         <optgroup label="🛍️ ร้านค้า (Retail)">
                             <option value="retail_sales">ร้านค้าปลีก (Retail Sales)</option>
                             <option value="supermarket">ซุปเปอร์มาร์เก็ต (Supermarket)</option>
-                            <option value="mall_common">ศูนย์การค้า-พื้นที่รวม (Mall Common)</option>
-                            <option value="barber_shop">ร้านตัดผม (Barber Shop)</option>
-                            <option value="beauty_salon">ร้านเสริมสวย (Beauty Salon)</option>
-                            <option value="pharmacy">ร้านขายยา (Pharmacy)</option>
-                        </optgroup>
-                        
-                        <optgroup label="🎭 ที่ชุมนุมสาธารณะ (Public Assembly)">
-                            <option value="auditorium">หอประชุม (Auditorium)</option>
-                            <option value="church_chapel">โบสถ์/วิหาร (Church/Chapel)</option>
-                            <option value="courtroom">ศาลา (Courtroom)</option>
-                            <option value="legislative_chamber">ห้องสภา (Legislative Chamber)</option>
-                            <option value="library_public">ห้องสมุดสาธารณะ (Public Library)</option>
-                            <option value="museum">พิพิธภัณฑ์ (Museum)</option>
-                        </optgroup>
-                        
-                        <optgroup label="🏨 โรงแรมและที่พัก (Hotels & Lodging)">
-                            <option value="hotel_bedroom">ห้องนอนโรงแรม (Hotel Bedroom)</option>
-                            <option value="hotel_lobby">ล็อบบี้โรงแรม (Hotel Lobby)</option>
-                            <option value="dormitory_bedroom">ห้องนอนหอพัก (Dormitory Bedroom)</option>
-                        </optgroup>
-                        
-                        <optgroup label="🏃‍♂️ กีฬาและบันเทิง (Sports & Entertainment)">
-                            <option value="gymnasium">โรงยิม (Gymnasium)</option>
-                            <option value="health_club_aerobics">ฟิตเนส/แอโรบิค (Health Club/Aerobics)</option>
-                            <option value="health_club_weight">ฟิตเนส/ยกน้ำหนัก (Health Club/Weight)</option>
-                            <option value="disco_dance">ดิสโก้/เต้นรำ (Disco/Dance)</option>
-                            <option value="bowling_alley">โบว์ลิ่ง (Bowling Alley)</option>
-                            <option value="gambling_casino">คาสิโน (Gambling Casino)</option>
-                            <option value="spectator_areas">ที่นั่งผู้ชม (Spectator Areas)</option>
-                            <option value="swimming_pools">สระว่ายน้ำ (Swimming Pools)</option>
-                        </optgroup>
-                        
-                        <optgroup label="🚗 ขนส่ง (Transportation)">
-                            <option value="transportation_platform">ชานชาลา (Transportation Platform)</option>
-                            <option value="transportation_waiting">ห้องรอขนส่ง (Transportation Waiting)</option>
-                        </optgroup>
-                        
-                        <optgroup label="🏥 สถานพยาบาล (Medical Facilities)">
-                            <option value="patient_room">ห้องผู้ป่วย (Patient Room)</option>
-                            <option value="operating_room">ห้องผ่าตัด (Operating Room)</option>
-                        </optgroup>
-                        
-                        <optgroup label="🏗️ ทั่วไป (General)">
-                            <option value="break_room">ห้องพัก (Break Room)</option>
-                            <option value="corridor">ทางเดิน (Corridor)</option>
-                            <option value="storage">ห้องเก็บของ (Storage)</option>
-                            <option value="bank_vault">ห้องนิรภัยธนาคาร (Bank Vault)</option>
-                            <option value="computer_room">ห้องคอมพิวเตอร์ (Computer Room)</option>
-                            <option value="photo_studio">สตูดิโอถ่ายรูป (Photo Studio)</option>
                         </optgroup>
                     </select>
                 </div>
@@ -848,6 +824,11 @@
                 <div class="form-group">
                     <label for="occupancy">จำนวนผู้ใช้งาน (Occupancy): <span class="unit">คน</span></label>
                     <input type="number" id="occupancy" value="20" min="1">
+                    <div style="font-size: 0.85em; color: #7f8c8d; margin-top: 5px;">
+                        <strong>🏗️ Occupant Density แนะนำ:</strong> 
+                        <span id="recommendedDensity" style="color: #667eea; font-weight: bold;">50 คน/100m²</span>
+                        <br><span style="font-size: 0.8em;">สำหรับพื้นที่ <span id="currentSpaceType">100 m²</span> = <span id="suggestedOccupancy" style="color: #e67e22; font-weight: bold;">50 คน</span></span>
+                    </div>
                 </div>
                 
                 <div class="form-group">
@@ -902,7 +883,7 @@
         <!-- ASHRAE 62.1 Breakdown Section -->
         <div class="input-section" style="margin-top: 20px;">
             <h3>🌬️ ASHRAE 62.1 Requirements Breakdown</h3>
-            <div class="ashrae-breakdown">
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px;">
                 <div class="breakdown-card">
                     <h4>Rp - People Component:</h4>
                     <div style="margin-bottom: 8px;"><strong>Rate:</strong> <span id="rpRate">-</span> L/s·person</div>
@@ -914,6 +895,12 @@
                     <div style="margin-bottom: 8px;"><strong>Rate:</strong> <span id="raRate">-</span> L/s·m²</div>
                     <div style="margin-bottom: 8px;"><strong>Area:</strong> <span id="areaSize">-</span> m²</div>
                     <div style="margin-bottom: 8px;"><strong>Required:</strong> <span id="raValue" style="color: #1976d2; font-weight: bold;">-</span> <span id="raUnit">L/s</span></div>
+                </div>
+                <div class="breakdown-card">
+                    <h4>📊 Space Parameters:</h4>
+                    <div style="margin-bottom: 8px;"><strong>Occupant Density:</strong> <span id="standardDensity">-</span> คน/100m²</div>
+                    <div style="margin-bottom: 8px;"><strong>Combined OA:</strong> <span id="combinedRate">-</span> L/s·person</div>
+                    <div style="margin-bottom: 8px;"><strong>Air Class:</strong> <span id="airClass" style="color: #1976d2; font-weight: bold;">-</span></div>
                 </div>
             </div>
             <div class="breakdown-total">
@@ -1072,74 +1059,117 @@
             height: 3.28084      // m to ft
         };
         
-        // Space types data (ASHRAE 62.1 Table 6.2.2.1) - Complete list from original
+        // Space types data (ASHRAE 62.1 Table 6.2.2.1) - Updated from Thai document
         const spaceTypes = {
-            // Educational Facilities
-            classroom_age3to5: { perPerson: 3.8, perArea: 0.3, description: "ห้องเรียน 3-5 ปี (Classroom Age 3-5)" },
-            classroom_age6plus: { perPerson: 3.8, perArea: 0.3, description: "ห้องเรียน 6+ ปี (Classroom Age 6+)" },
-            lecture_hall: { perPerson: 3.8, perArea: 0.6, description: "หอบรรยาย (Lecture Hall)" },
-            library: { perPerson: 2.5, perArea: 0.6, description: "ห้องสมุด (Library)" },
+            // ทัณฑสถาน (Correctional Facilities)
+            cell: { 
+                perPerson: 2.36, perArea: 0.61, occupantDensity: 25, combinedRate: 4.72, airClass: 1,
+                description: "ห้องคุมขังนักโทษ (Cell)" 
+            },
+            dayroom: { 
+                perPerson: 2.36, perArea: 0.30, occupantDensity: 30, combinedRate: 3.30, airClass: 1,
+                description: "ห้องกิจกรรมการ (Dayroom)" 
+            },
+            guard_stations: { 
+                perPerson: 2.36, perArea: 0.30, occupantDensity: 15, combinedRate: 4.25, airClass: 1,
+                description: "ห้องยาม (Guard Stations)" 
+            },
+            booking_waiting: { 
+                perPerson: 3.54, perArea: 0.30, occupantDensity: 50, combinedRate: 4.25, airClass: 2,
+                description: "ห้องรอ (Booking/Waiting)" 
+            },
             
-            // Food and Beverage Service
-            restaurant_dining: { perPerson: 7.5, perArea: 0.9, description: "ห้องอาหาร (Restaurant Dining)" },
-            cafeteria: { perPerson: 3.8, perArea: 0.6, description: "โรงอาหาร (Cafeteria)" },
-            kitchen_commercial: { perPerson: 7.5, perArea: 0.6, description: "ครัวพาณิชย์ (Commercial Kitchen)" },
-            bar_lounge: { perPerson: 7.5, perArea: 0.9, description: "บาร์/ลาวน์จ (Bar/Lounge)" },
+            // สถานศึกษา (Educational Facilities)
+            daycare_age4: { 
+                perPerson: 4.72, perArea: 0.91, occupantDensity: 25, combinedRate: 8.03, airClass: 2,
+                description: "ศูนย์รับราชเด็กเล็ก อายุ 4 ขวบ (Daycare through age 4)" 
+            },
+            daycare_sickroom: { 
+                perPerson: 4.72, perArea: 0.91, occupantDensity: 25, combinedRate: 8.03, airClass: 3,
+                description: "ห้องเด็กป่วยในศูนย์รับราชเด็กเล็ก (Daycare Sickroom)" 
+            },
+            classroom_age5to8: { 
+                perPerson: 4.72, perArea: 0.61, occupantDensity: 25, combinedRate: 7.08, airClass: 1,
+                description: "ห้องเรียน อายุ 5-8 ปี (Classrooms ages 5-8)" 
+            },
+            classroom_age9plus: { 
+                perPerson: 4.72, perArea: 0.61, occupantDensity: 35, combinedRate: 6.14, airClass: 1,
+                description: "ห้องเรียน อายุตั้งแต่ 9 ขึ้นไป (Classrooms age 9 plus)" 
+            },
+            lecture_classroom: { 
+                perPerson: 3.54, perArea: 0.30, occupantDensity: 65, combinedRate: 3.78, airClass: 1,
+                description: "ห้องเรียนบรรยายขนาดใหญ่ (Lecture Classroom)" 
+            },
+            lecture_hall_fixed: { 
+                perPerson: 3.54, perArea: 0.30, occupantDensity: 150, combinedRate: 3.78, airClass: 1,
+                description: "หอประชุมบรรยายขนาดใหญ่ (Lecture Hall Fixed Seats)" 
+            },
+            art_classroom: { 
+                perPerson: 4.72, perArea: 0.91, occupantDensity: 20, combinedRate: 8.97, airClass: 2,
+                description: "ห้องเรียนศิลปะ (Art Classroom)" 
+            },
+            science_laboratories: { 
+                perPerson: 4.72, perArea: 0.91, occupantDensity: 25, combinedRate: 8.03, airClass: 2,
+                description: "ห้องปฏิบัติการทางวิทยาศาสตร์ (Science Laboratories)" 
+            },
+            university_laboratories: { 
+                perPerson: 4.72, perArea: 0.91, occupantDensity: 25, combinedRate: 8.03, airClass: 2,
+                description: "ห้องปฏิบัติการในมหาวิทยาลัย (University/College Laboratories)" 
+            },
+            wood_metal_shop: { 
+                perPerson: 4.72, perArea: 0.91, occupantDensity: 20, combinedRate: 8.97, airClass: 2,
+                description: "ห้องปฏิบัติการช่างไม้โลหะ (Wood/Metal Shop)" 
+            },
+            computer_lab: { 
+                perPerson: 4.72, perArea: 0.61, occupantDensity: 25, combinedRate: 7.08, airClass: 1,
+                description: "ห้องปฏิบัติการคอมพิวเตอร์ (Computer Lab)" 
+            },
+            media_center: { 
+                perPerson: 4.72, perArea: 0.61, occupantDensity: 25, combinedRate: 7.08, airClass: 1,
+                description: "ศูนย์สื่อ (Media Center)" 
+            },
             
-            // General
-            break_room: { perPerson: 2.5, perArea: 0.6, description: "ห้องพัก (Break Room)" },
-            corridor: { perPerson: 0, perArea: 0.06, description: "ทางเดิน (Corridor)" },
-            storage: { perPerson: 0, perArea: 0.06, description: "ห้องเก็บของ (Storage)" },
+            // สำนักงาน (Office Buildings) - คงเดิมเพื่อความเข้ากันได้
+            office_space: { 
+                perPerson: 2.5, perArea: 0.3, occupantDensity: 50, combinedRate: 8.5, airClass: 1,
+                description: "พื้นที่สำนักงาน (Office Space)" 
+            },
+            conference_room: { 
+                perPerson: 2.5, perArea: 0.3, occupantDensity: 50, combinedRate: 8.5, airClass: 1,
+                description: "ห้องประชุม (Conference Room)" 
+            },
+            reception: { 
+                perPerson: 2.5, perArea: 0.3, occupantDensity: 30, combinedRate: 8.5, airClass: 1,
+                description: "แผนกต้อนรับ (Reception)" 
+            },
             
-            // Hotels, Motels, Resorts, Dormitories
-            hotel_bedroom: { perPerson: 2.5, perArea: 0.3, description: "ห้องนอนโรงแรม (Hotel Bedroom)" },
-            hotel_lobby: { perPerson: 2.5, perArea: 0.9, description: "ล็อบบี้โรงแรม (Hotel Lobby)" },
-            dormitory_bedroom: { perPerson: 2.5, perArea: 0.3, description: "ห้องนอนหอพัก (Dormitory Bedroom)" },
+            // อาหารและเครื่องดื่ม (Food & Beverage) - คงเดิม
+            restaurant_dining: { 
+                perPerson: 7.5, perArea: 0.9, occupantDensity: 70, combinedRate: 20, airClass: 1,
+                description: "ห้องอาหาร (Restaurant Dining)" 
+            },
+            cafeteria: { 
+                perPerson: 3.8, perArea: 0.6, occupantDensity: 100, combinedRate: 10, airClass: 1,
+                description: "โรงอาหาร (Cafeteria)" 
+            },
+            kitchen_commercial: { 
+                perPerson: 7.5, perArea: 0.6, occupantDensity: 20, combinedRate: 15, airClass: 2,
+                description: "ครัวพาณิชย์ (Commercial Kitchen)" 
+            },
+            bar_lounge: { 
+                perPerson: 7.5, perArea: 0.9, occupantDensity: 100, combinedRate: 30, airClass: 1,
+                description: "บาร์/ลาวน์จ (Bar/Lounge)" 
+            },
             
-            // Office Buildings
-            office_space: { perPerson: 2.5, perArea: 0.3, description: "พื้นที่สำนักงาน (Office Space)" },
-            conference_room: { perPerson: 2.5, perArea: 0.3, description: "ห้องประชุม (Conference Room)" },
-            reception: { perPerson: 2.5, perArea: 0.3, description: "แผนกต้อนรับ (Reception)" },
-            telephone_closet: { perPerson: 2.5, perArea: 0.3, description: "ห้องโทรศัพท์ (Telephone Closet)" },
-            
-            // Public Assembly Spaces
-            auditorium: { perPerson: 2.5, perArea: 0.3, description: "หอประชุม (Auditorium)" },
-            church_chapel: { perPerson: 2.5, perArea: 0.3, description: "โบสถ์/วิหาร (Church/Chapel)" },
-            courtroom: { perPerson: 2.5, perArea: 0.3, description: "ศาลา (Courtroom)" },
-            legislative_chamber: { perPerson: 2.5, perArea: 0.9, description: "ห้องสภา (Legislative Chamber)" },
-            library_public: { perPerson: 2.5, perArea: 0.6, description: "ห้องสมุดสาธารณะ (Public Library)" },
-            museum: { perPerson: 3.8, perArea: 0.6, description: "พิพิธภัณฑ์ (Museum)" },
-            
-            // Retail
-            retail_sales: { perPerson: 3.8, perArea: 0.6, description: "ร้านค้าปลีก (Retail Sales)" },
-            supermarket: { perPerson: 3.8, perArea: 0.6, description: "ซุปเปอร์มาร์เก็ต (Supermarket)" },
-            mall_common: { perPerson: 3.8, perArea: 0.6, description: "ศูนย์การค้า-พื้นที่รวม (Mall Common)" },
-            barber_shop: { perPerson: 7.5, perArea: 0.6, description: "ร้านตัดผม (Barber Shop)" },
-            beauty_salon: { perPerson: 10, perArea: 0.6, description: "ร้านเสริมสวย (Beauty Salon)" },
-            pharmacy: { perPerson: 7.5, perArea: 0.9, description: "ร้านขายยา (Pharmacy)" },
-            
-            // Sports and Entertainment
-            disco_dance: { perPerson: 10, perArea: 0.9, description: "ดิสโก้/เต้นรำ (Disco/Dance)" },
-            health_club_aerobics: { perPerson: 10, perArea: 0.6, description: "ฟิตเนส/แอโรบิค (Health Club/Aerobics)" },
-            health_club_weight: { perPerson: 10, perArea: 0.6, description: "ฟิตเนส/ยกน้ำหนัก (Health Club/Weight)" },
-            bowling_alley: { perPerson: 5, perArea: 0.9, description: "โบว์ลิ่ง (Bowling Alley)" },
-            gambling_casino: { perPerson: 15, perArea: 0.9, description: "คาสิโน (Gambling Casino)" },
-            gymnasium: { perPerson: 7.5, perArea: 0.3, description: "โรงยิม (Gymnasium)" },
-            spectator_areas: { perPerson: 3.8, perArea: 0.3, description: "ที่นั่งผู้ชม (Spectator Areas)" },
-            swimming_pools: { perPerson: 7.5, perArea: 0.6, description: "สระว่ายน้ำ (Swimming Pools)" },
-            
-            // Transportation
-            transportation_platform: { perPerson: 3.8, perArea: 0.3, description: "ชานชาลา (Transportation Platform)" },
-            transportation_waiting: { perPerson: 3.8, perArea: 0.3, description: "ห้องรอขนส่ง (Transportation Waiting)" },
-            
-            // Medical Facilities
-            patient_room: { perPerson: 12.5, perArea: 0.3, description: "ห้องผู้ป่วย (Patient Room)" },
-            operating_room: { perPerson: 15, perArea: 0.9, description: "ห้องผ่าตัด (Operating Room)" },
-            
-            // Miscellaneous
-            bank_vault: { perPerson: 2.5, perArea: 0.3, description: "ห้องนิรภัยธนาคาร (Bank Vault)" },
-            computer_room: { perPerson: 2.5, perArea: 0.3, description: "ห้องคอมพิวเตอร์ (Computer Room)" },
-            photo_studio: { perPerson: 2.5, perArea: 0.6, description: "สตูดิโอถ่ายรูป (Photo Studio)" }
+            // ร้านค้า (Retail) - คงเดิม
+            retail_sales: { 
+                perPerson: 3.8, perArea: 0.6, occupantDensity: 15, combinedRate: 7.5, airClass: 1,
+                description: "ร้านค้าปลีก (Retail Sales)" 
+            },
+            supermarket: { 
+                perPerson: 3.8, perArea: 0.6, occupantDensity: 8, combinedRate: 7.5, airClass: 1,
+                description: "ซุปเปอร์มาร์เก็ต (Supermarket)" 
+            }
         };
         
         // Metabolic rates by activity level (met units)
@@ -1236,6 +1266,29 @@
             updateArea();
         }
         
+        function updateOccupantDensityGuide() {
+            const spaceType = document.getElementById('spaceType').value;
+            const spaceData = spaceTypes[spaceType];
+            const area = parseFloat(document.getElementById('calculatedArea').value) || 100;
+            
+            // Update recommended density
+            document.getElementById('recommendedDensity').textContent = spaceData.occupantDensity + ' คน/100m²';
+            
+            // Calculate suggested occupancy for current area
+            let suggestedOccupancy;
+            if (currentUnit === 'SI') {
+                suggestedOccupancy = Math.round((area * spaceData.occupantDensity) / 100);
+                document.getElementById('currentSpaceType').textContent = area.toFixed(1) + ' m²';
+            } else {
+                // Convert area back to m² for calculation
+                const areaInM2 = area / conversions.area;
+                suggestedOccupancy = Math.round((areaInM2 * spaceData.occupantDensity) / 100);
+                document.getElementById('currentSpaceType').textContent = area.toFixed(0) + ' ft²';
+            }
+            
+            document.getElementById('suggestedOccupancy').textContent = suggestedOccupancy + ' คน';
+        }
+        
         function updateArea() {
             const width = parseFloat(document.getElementById('width').value) || 0;
             const length = parseFloat(document.getElementById('length').value) || 0;
@@ -1247,6 +1300,9 @@
             } else {
                 document.getElementById('calculatedArea').value = area.toFixed(0);
             }
+            
+            // Update occupant density guide
+            updateOccupantDensityGuide();
         }
         
         function calculate() {
@@ -1332,6 +1388,11 @@
             document.getElementById('rpValue').textContent = (displayValues.rpComponent).toFixed(1);
             document.getElementById('raValue').textContent = (displayValues.raComponent).toFixed(1);
             document.getElementById('totalRequired').textContent = Math.round(displayValues.ashrae621RequiredOA);
+            
+            // Update new fields
+            document.getElementById('standardDensity').textContent = spaceData.occupantDensity;
+            document.getElementById('combinedRate').textContent = spaceData.combinedRate.toFixed(2);
+            document.getElementById('airClass').textContent = spaceData.airClass;
             
             // Update Main Design Results
             document.getElementById('designOA').textContent = Math.round(displayValues.designOA);
@@ -1475,6 +1536,24 @@
                             <td>${spaceData.description}</td>
                             <td>-</td>
                             <td>According to ASHRAE 62.1 Table 6.2.2.1</td>
+                        </tr>
+                        <tr>
+                            <td>Occupant Density (Standard)</td>
+                            <td>${spaceData.occupantDensity}</td>
+                            <td>คน/100m²</td>
+                            <td>ASHRAE recommended density</td>
+                        </tr>
+                        <tr>
+                            <td>Combined OA Rate</td>
+                            <td>${spaceData.combinedRate.toFixed(2)}</td>
+                            <td>L/s·person</td>
+                            <td>Total outdoor air requirement per person</td>
+                        </tr>
+                        <tr>
+                            <td>Air Class</td>
+                            <td>${spaceData.airClass}</td>
+                            <td>-</td>
+                            <td>Air quality classification (1=Best, 2=Standard, 3=Special)</td>
                         </tr>
                         <tr>
                             <td>Floor Area</td>
@@ -1621,7 +1700,7 @@
         function exportToExcel() {
             // For LITE version - create simple CSV export (same as V49)
             const data = [
-                ['ASHRAE 62.1 Calculation Report - LITE Version (Updated Formula)'],
+                ['ASHRAE 62.1 Calculation Report - LITE Version (Updated with Thai Standards)'],
                 [''],
                 ['Input Parameters'],
                 ['Space Type', document.getElementById('spaceType').selectedOptions[0].text],
@@ -1629,6 +1708,9 @@
                 ['Length', document.getElementById('length').value, currentUnit === 'SI' ? 'm' : 'ft'],
                 ['Area', document.getElementById('calculatedArea').value, currentUnit === 'SI' ? 'm²' : 'ft²'],
                 ['Occupancy', document.getElementById('occupancy').value, 'persons'],
+                ['Standard Occupant Density', document.getElementById('standardDensity').textContent, 'คน/100m²'],
+                ['Combined OA Rate', document.getElementById('combinedRate').textContent, 'L/s·person'],
+                ['Air Class', document.getElementById('airClass').textContent, '-'],
                 ['Ceiling Height', document.getElementById('ceilingHeight').value, currentUnit === 'SI' ? 'm' : 'ft'],
                 ['Activity Level', document.getElementById('activityLevel').value],
                 ['Metabolic Rate', document.getElementById('metabolicRate').textContent, 'met'],
@@ -1642,7 +1724,7 @@
                 ['Resulting CO2', (document.getElementById('indoorCO2') ? document.getElementById('indoorCO2').textContent : 'N/A'), 'ppm'],
                 ['Air Changes/Hour', (document.getElementById('airChanges') ? document.getElementById('airChanges').textContent : 'N/A'), 'ACH'],
                 [''],
-                ['Generated by HVAC Calculator LITE v1.1.0 - Updated CO2 Formula']
+                ['Generated by HVAC Calculator LITE v1.1.0 - Updated Thai Standards']
             ];
             
             let csvContent = data.map(row => row.join(',')).join('\n');
@@ -1693,6 +1775,7 @@
         window.onload = function() {
             updateUnitLabels();
             updateArea();
+            updateOccupantDensityGuide();
             calculate();
             
             // Add event listeners
@@ -1712,7 +1795,10 @@
             document.getElementById('targetCO2').addEventListener('input', calculate);
             document.getElementById('outdoorCO2').addEventListener('input', calculate);
             document.getElementById('ventilationEff').addEventListener('input', calculate);
-            document.getElementById('spaceType').addEventListener('change', calculate);
+            document.getElementById('spaceType').addEventListener('change', function() {
+                updateOccupantDensityGuide();
+                calculate();
+            });
             document.getElementById('activityLevel').addEventListener('change', calculate);
             document.getElementById('enableDCV').addEventListener('change', calculate);
         };
