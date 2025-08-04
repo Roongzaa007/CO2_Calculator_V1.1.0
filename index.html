@@ -759,10 +759,10 @@
         
         <div class="calculator-grid">
             <div class="input-section">
-                <h3>ข้อมูลอาคาร (Building Information)</h3>
+<h3>ข้อมูลอาคาร (Building Information)</h3>
                 
                 <div class="form-group">
-                    <label for="spaceType">ประเภทพื้นที่ (Space Type):</label>
+                    <label for="spaceType">ประเภทพื้นที่ (Space Type): <strong style="color: #e74c3c;">78 ประเภท</strong></label>
                     <select id="spaceType">
                         <optgroup label="🏛️ ทัณฑสถาน (Correctional Facilities)">
                             <option value="cell">ห้องคุมขังนักโทษ (Cell)</option>
@@ -772,8 +772,8 @@
                         </optgroup>
                         
                         <optgroup label="📚 สถานศึกษา (Educational Facilities)">
-                            <option value="daycare_age4">ศูนย์รับราชเด็กเล็ก อายุ 4 ขวบ (Daycare through age 4)</option>
-                            <option value="daycare_sickroom">ห้องเด็กป่วยในศูนย์รับราชเด็กเล็ก (Daycare Sickroom)</option>
+                            <option value="daycare_age4">ศูนย์เด็กเล็ก อายุ 4 ขวบ (Daycare through age 4)</option>
+                            <option value="daycare_sickroom">ห้องเด็กป่วยในศูนย์เด็กเล็ก (Daycare Sickroom)</option>
                             <option value="classroom_age5to8">ห้องเรียน อายุ 5-8 ปี (Classrooms ages 5-8)</option>
                             <option value="classroom_age9plus">ห้องเรียน อายุตั้งแต่ 9 ขึ้นไป (Classrooms age 9 plus)</option>
                             <option value="lecture_classroom">ห้องเรียนบรรยายขนาดใหญ่ (Lecture Classroom)</option>
@@ -784,24 +784,95 @@
                             <option value="wood_metal_shop">ห้องปฏิบัติการช่างไม้โลหะ (Wood/Metal Shop)</option>
                             <option value="computer_lab">ห้องปฏิบัติการคอมพิวเตอร์ (Computer Lab)</option>
                             <option value="media_center">ศูนย์สื่อ (Media Center)</option>
+                            <option value="music_theater_dance">ห้องดนตรี/ละคร/เต้นรำ (Music/Theater/Dance)</option>
+                            <option value="multiuse_assembly">ห้องประชุมอเนกประสงค์ (Multiuse Assembly)</option>
                         </optgroup>
                         
-                        <optgroup label="🏢 สำนักงาน (Office Buildings)">
+                        <optgroup label="🍽️ อาหารและเครื่องดื่ม (Food and Beverage Service)">
+                            <option value="restaurant_dining">ร้านอาหารแบบนั่งกิน (Restaurant Dining Rooms)</option>
+                            <option value="cafeteria_fastfood">โรงอาหาร/ร้านอาหารเร็ว (Cafeteria/Fast-food Dining)</option>
+                            <option value="bars_cocktail_lounges">บาร์ ผับ เลาน์จ (Bars, Cocktail Lounges)</option>
+                            <option value="kitchen_cooking">ห้องครัว (สำหรับปรุงอาหาร) (Kitchen Cooking)</option>
+                        </optgroup>
+                        
+                        <optgroup label="🏗️ ทั่วไป (General)">
+                            <option value="break_rooms">ห้องพักผ่อน (Break Rooms)</option>
+                            <option value="coffee_stations">มุมกาแฟ (Coffee Stations)</option>
+                            <option value="conference_meeting">ห้องสัมมนา/ห้องประชุม (Conference/Meeting)</option>
+                            <option value="corridors">โถงทางเดิน (Corridors)</option>
+                            <option value="occupable_storage_liquids">ห้องเก็บของเหลวหรือเจล (Occupable Storage Rooms for Liquids or Gels)</option>
+                        </optgroup>
+                        
+                        <optgroup label="🏨 โรงแรม โมเต็ล รีสอร์ท หอพัก (Hotels, Motels, Resorts, Dormitories)">
+                            <option value="bedroom_living_room">ห้องนอน/ห้องนั่งเล่น (Bedroom/Living Room)</option>
+                            <option value="barracks_sleeping">ห้องนอนรวม (Barracks Sleeping Areas)</option>
+                            <option value="laundry_rooms_central">ห้องซักรีดส่วนกลาง (Laundry Rooms, Central)</option>
+                            <option value="laundry_rooms_dwelling">ห้องซักรีดในหน่วยที่พักอาศัย (Laundry Rooms within Dwelling Units)</option>
+                            <option value="lobbies_prefunction">ห้องโถงรับแขก/ห้องรอ (Lobbies/Prefunction)</option>
+                            <option value="multipurpose_assembly">ห้องประชุมอเนกประสงค์ (Multipurpose Assembly)</option>
+                        </optgroup>
+                        
+                        <optgroup label="🏢 อาคารสำนักงาน (Office Buildings)">
+                            <option value="breakrooms_office">ห้องพักในสำนักงาน (Breakrooms)</option>
+                            <option value="main_entry_lobbies">ห้องโถงทางเข้าหลัก (Main Entry Lobbies)</option>
+                            <option value="occupable_storage_dry">ห้องเก็บของแห้งที่มีคนใช้งาน (Occupable Storage Rooms for Dry Materials)</option>
                             <option value="office_space" selected>พื้นที่สำนักงาน (Office Space)</option>
-                            <option value="conference_room">ห้องประชุม (Conference Room)</option>
-                            <option value="reception">แผนกต้อนรับ (Reception)</option>
+                            <option value="reception_areas">พื้นที่รับแขกต้อนรับ (Reception Areas)</option>
+                            <option value="telephone_data_entry">พื้นที่โทรศัพท์/ป้อนข้อมูล (Telephone/Data Entry)</option>
                         </optgroup>
                         
-                        <optgroup label="🍽️ อาหารและเครื่องดื่ม (Food & Beverage)">
-                            <option value="restaurant_dining">ห้องอาหาร (Restaurant Dining)</option>
-                            <option value="cafeteria">โรงอาหาร (Cafeteria)</option>
-                            <option value="kitchen_commercial">ครัวพาณิชย์ (Commercial Kitchen)</option>
-                            <option value="bar_lounge">บาร์/ลาวน์จ (Bar/Lounge)</option>
+                        <optgroup label="🔧 พื้นที่เบ็ดเตล็ด (Miscellaneous Spaces)">
+                            <option value="bank_vaults">ตู้นิรภัยธนาคาร (Bank Vaults/Safe Deposit)</option>
+                            <option value="banks_lobbies">โถงธนาคาร (Banks or Bank Lobbies)</option>
+                            <option value="computer_not_printing">ห้องคอมพิวเตอร์ (ไม่มีการพิมพ์) (Computer Not Printing)</option>
+                            <option value="freezer_refrigerated">ห้องแช่แข็ง (<10° C) (Freezer and Refrigerated Spaces)</option>
+                            <option value="general_manufacturing">พื้นที่การผลิตทั่วไป (General Manufacturing)</option>
+                            <option value="pharmacy_prep">เภสัชกรรม (พื้นที่เตรียมยา) (Pharmacy Prep Area)</option>
+                            <option value="photo_studios">สตูดิโอถ่ายภาพ (Photo Studios)</option>
+                            <option value="shipping_receiving">พื้นที่จัดส่งรับสินค้า (Shipping/Receiving)</option>
+                            <option value="sorting_packing">พื้นที่คัดแยก บรรจุ ประกอบ (Sorting, Packing, Light Assembly)</option>
+                            <option value="telephone_closets">ตู้โทรศัพท์ (Telephone Closets)</option>
+                            <option value="transportation_waiting">พื้นที่รอการขนส่ง (Transportation Waiting)</option>
+                            <option value="warehouses">โกดัง (Warehouses)</option>
+                        </optgroup>
+                        
+                        <optgroup label="🎭 พื้นที่ชุมนุมสาธารณะ (Public Assembly Spaces)">
+                            <option value="auditorium_seating">หอประชุม มีที่นั่งกำหนด (Auditorium Seating Area)</option>
+                            <option value="places_religious_worship">สถานที่ประกอบศาสนกิจ (Places of Religious Worship)</option>
+                            <option value="courtrooms">ห้องพิจารณาคดี (Courtrooms)</option>
+                            <option value="legislative_chambers">ห้องประชุมนิติบัญญัติ (Legislative Chambers)</option>
+                            <option value="libraries">ห้องสมุด (Libraries)</option>
+                            <option value="lobbies_public">ห้องโถงสาธารณะ (Lobbies)</option>
+                            <option value="museums_children">พิพิธภัณฑ์ (สำหรับเด็ก) (Museums Children's)</option>
+                            <option value="museums_galleries">พิพิธภัณฑ์/หอศิลป์ (Museums/Galleries)</option>
+                        </optgroup>
+                        
+                        <optgroup label="🏠 ที่อยู่อาศัย (Residential)">
+                            <option value="dwelling_unit">หน่วยที่อยู่อาศัย (Dwelling Unit)</option>
+                            <option value="common_corridors">โถงทางเดินร่วม (Common Corridors)</option>
                         </optgroup>
                         
                         <optgroup label="🛍️ ร้านค้า (Retail)">
-                            <option value="retail_sales">ร้านค้าปลีก (Retail Sales)</option>
+                            <option value="sales_except_below">พื้นที่การขาย (ยกเว้นที่ระบุล่าง) (Sales Except as Below)</option>
+                            <option value="mall_common_areas">พื้นที่ใช้ร่วมกันในห้างสรรพสินค้า (Mall Common Areas)</option>
+                            <option value="barbershop">ร้านตัดผม (Barbershop)</option>
+                            <option value="beauty_nail_salons">ร้านเสริมสวยและทำเล็บ (Beauty and Nail Salons)</option>
+                            <option value="pet_shops">ร้านขายสัตว์เลี้ยง (Pet Shops Animal Areas)</option>
                             <option value="supermarket">ซุปเปอร์มาร์เก็ต (Supermarket)</option>
+                            <option value="coin_operated_laundries">ร้านซักผ้าแบบหยอดเหรียญ (Coin-operated Laundries)</option>
+                        </optgroup>
+                        
+                        <optgroup label="🏃‍♂️ กีฬาและกิจกรรมบันเทิง (Sports and Entertainment)">
+                            <option value="gym_sports_arena">ห้องออกกำลังกาย, สนามกีฬา (Gym, Sports Arena Play Area)</option>
+                            <option value="spectator_area">พื้นที่นั่งชมผู้ชม (Spectator Area)</option>
+                            <option value="swimming_pool_deck">สระว่ายน้ำและสวนเดก (Swimming Pool & Deck)</option>
+                            <option value="disco_dance_floors">พื้นที่เต้นรำในดิสโก้ (Disco/Dance Floors)</option>
+                            <option value="health_club_aerobics">เฮลท์คลับ ห้องแอโรบิค (Health Club/Aerobics Room)</option>
+                            <option value="health_club_weight_rooms">เฮลท์คลับ ห้องยกน้ำหนัก (Health Club/Weight Rooms)</option>
+                            <option value="bowling_alley_seating">โบว์ลิ่ง (พื้นที่นั่ง) (Bowling Alley Seating)</option>
+                            <option value="gambling_casinos">คาสิโน (Gambling Casinos)</option>
+                            <option value="game_arcades">ร้านเกม (Game Arcades)</option>
+                            <option value="stages_studios">เวทีและสตูดิโอ (Stages, Studios)</option>
                         </optgroup>
                     </select>
                 </div>
@@ -1059,11 +1130,11 @@
             height: 3.28084      // m to ft
         };
         
-        // Space types data (ASHRAE 62.1 Table 6.2.2.1) - Updated from Thai document
+        // Space types data (ASHRAE 62.1 Table 6.2.2.1) - Complete 78 space types
         const spaceTypes = {
-            // ทัณฑสถาน (Correctional Facilities)
+            // 🏛️ ทัณฑสถาน (Correctional Facilities) - 4 types
             cell: { 
-                perPerson: 2.36, perArea: 0.61, occupantDensity: 25, combinedRate: 4.72, airClass: 1,
+                perPerson: 2.36, perArea: 0.61, occupantDensity: 25, combinedRate: 4.72, airClass: 2,
                 description: "ห้องคุมขังนักโทษ (Cell)" 
             },
             dayroom: { 
@@ -1079,14 +1150,14 @@
                 description: "ห้องรอ (Booking/Waiting)" 
             },
             
-            // สถานศึกษา (Educational Facilities)
+            // 📚 สถานศึกษา (Educational Facilities) - 14 types
             daycare_age4: { 
                 perPerson: 4.72, perArea: 0.91, occupantDensity: 25, combinedRate: 8.03, airClass: 2,
-                description: "ศูนย์รับราชเด็กเล็ก อายุ 4 ขวบ (Daycare through age 4)" 
+                description: "ศูนย์เด็กเล็ก อายุ 4 ขวบ (Daycare through age 4)" 
             },
             daycare_sickroom: { 
                 perPerson: 4.72, perArea: 0.91, occupantDensity: 25, combinedRate: 8.03, airClass: 3,
-                description: "ห้องเด็กป่วยในศูนย์รับราชเด็กเล็ก (Daycare Sickroom)" 
+                description: "ห้องเด็กป่วยในศูนย์เด็กเล็ก (Daycare Sickroom)" 
             },
             classroom_age5to8: { 
                 perPerson: 4.72, perArea: 0.61, occupantDensity: 25, combinedRate: 7.08, airClass: 1,
@@ -1128,50 +1199,274 @@
                 perPerson: 4.72, perArea: 0.61, occupantDensity: 25, combinedRate: 7.08, airClass: 1,
                 description: "ศูนย์สื่อ (Media Center)" 
             },
+            music_theater_dance: { 
+                perPerson: 4.72, perArea: 0.30, occupantDensity: 35, combinedRate: 5.66, airClass: 1,
+                description: "ห้องดนตรี/ละคร/เต้นรำ (Music/Theater/Dance)" 
+            },
+            multiuse_assembly: { 
+                perPerson: 3.54, perArea: 0.30, occupantDensity: 100, combinedRate: 3.78, airClass: 1,
+                description: "ห้องประชุมอเนกประสงค์ (Multiuse Assembly)" 
+            },
             
-            // สำนักงาน (Office Buildings) - คงเดิมเพื่อความเข้ากันได้
+            // 🍽️ อาหารและเครื่องดื่ม (Food and Beverage Service) - 4 types
+            restaurant_dining: { 
+                perPerson: 3.54, perArea: 0.91, occupantDensity: 70, combinedRate: 4.72, airClass: 2,
+                description: "ร้านอาหารแบบนั่งกิน (Restaurant Dining Rooms)" 
+            },
+            cafeteria_fastfood: { 
+                perPerson: 3.54, perArea: 0.91, occupantDensity: 100, combinedRate: 4.25, airClass: 2,
+                description: "โรงอาหาร/ร้านอาหารเร็ว (Cafeteria/Fast-food Dining)" 
+            },
+            bars_cocktail_lounges: { 
+                perPerson: 3.54, perArea: 0.91, occupantDensity: 100, combinedRate: 4.25, airClass: 2,
+                description: "บาร์ ผับ เลาน์จ (Bars, Cocktail Lounges)" 
+            },
+            kitchen_cooking: { 
+                perPerson: 3.54, perArea: 0.61, occupantDensity: 20, combinedRate: 6.61, airClass: 2,
+                description: "ห้องครัว (สำหรับปรุงอาหาร) (Kitchen Cooking)" 
+            },
+            
+            // 🏗️ ทั่วไป (General) - 5 types
+            break_rooms: { 
+                perPerson: 2.36, perArea: 0.30, occupantDensity: 25, combinedRate: 3.30, airClass: 1,
+                description: "ห้องพักผ่อน (Break Rooms)" 
+            },
+            coffee_stations: { 
+                perPerson: 2.36, perArea: 0.30, occupantDensity: 20, combinedRate: 3.78, airClass: 1,
+                description: "มุมกาแฟ (Coffee Stations)" 
+            },
+            conference_meeting: { 
+                perPerson: 2.36, perArea: 0.30, occupantDensity: 50, combinedRate: 2.83, airClass: 1,
+                description: "ห้องสัมมนา/ห้องประชุม (Conference/Meeting)" 
+            },
+            corridors: { 
+                perPerson: 0, perArea: 0.30, occupantDensity: 0, combinedRate: 0, airClass: 1,
+                description: "โถงทางเดิน (Corridors)" 
+            },
+            occupable_storage_liquids: { 
+                perPerson: 2.36, perArea: 0.61, occupantDensity: 2, combinedRate: 30.69, airClass: 2,
+                description: "ห้องเก็บของเหลวหรือเจล (Occupable Storage Rooms for Liquids or Gels)" 
+            },
+            
+            // 🏨 โรงแรม โมเต็ล รีสอร์ท หอพัก (Hotels, Motels, Resorts, Dormitories) - 6 types
+            bedroom_living_room: { 
+                perPerson: 2.36, perArea: 0.30, occupantDensity: 10, combinedRate: 5.19, airClass: 1,
+                description: "ห้องนอน/ห้องนั่งเล่น (Bedroom/Living Room)" 
+            },
+            barracks_sleeping: { 
+                perPerson: 2.36, perArea: 0.30, occupantDensity: 20, combinedRate: 3.78, airClass: 1,
+                description: "ห้องนอนรวม (Barracks Sleeping Areas)" 
+            },
+            laundry_rooms_central: { 
+                perPerson: 2.36, perArea: 0.61, occupantDensity: 10, combinedRate: 8.03, airClass: 2,
+                description: "ห้องซักรีดส่วนกลาง (Laundry Rooms, Central)" 
+            },
+            laundry_rooms_dwelling: { 
+                perPerson: 2.36, perArea: 0.61, occupantDensity: 10, combinedRate: 8.03, airClass: 1,
+                description: "ห้องซักรีดในหน่วยที่พักอาศัย (Laundry Rooms within Dwelling Units)" 
+            },
+            lobbies_prefunction: { 
+                perPerson: 3.54, perArea: 0.30, occupantDensity: 30, combinedRate: 4.72, airClass: 1,
+                description: "ห้องโถงรับแขก/ห้องรอ (Lobbies/Prefunction)" 
+            },
+            multipurpose_assembly: { 
+                perPerson: 2.36, perArea: 0.30, occupantDensity: 120, combinedRate: 2.83, airClass: 1,
+                description: "ห้องประชุมอเนกประสงค์ (Multipurpose Assembly)" 
+            },
+            
+            // 🏢 อาคารสำนักงาน (Office Buildings) - 6 types
+            breakrooms_office: { 
+                perPerson: 2.36, perArea: 0.61, occupantDensity: 50, combinedRate: 3.30, airClass: 1,
+                description: "ห้องพักในสำนักงาน (Breakrooms)" 
+            },
+            main_entry_lobbies: { 
+                perPerson: 2.36, perArea: 0.30, occupantDensity: 10, combinedRate: 5.19, airClass: 1,
+                description: "ห้องโถงทางเข้าหลัก (Main Entry Lobbies)" 
+            },
+            occupable_storage_dry: { 
+                perPerson: 2.36, perArea: 0.30, occupantDensity: 2, combinedRate: 16.51, airClass: 1,
+                description: "ห้องเก็บของแห้งที่มีคนใช้งาน (Occupable Storage Rooms for Dry Materials)" 
+            },
             office_space: { 
-                perPerson: 2.5, perArea: 0.3, occupantDensity: 50, combinedRate: 8.5, airClass: 1,
+                perPerson: 2.36, perArea: 0.30, occupantDensity: 5, combinedRate: 8.03, airClass: 1,
                 description: "พื้นที่สำนักงาน (Office Space)" 
             },
-            conference_room: { 
-                perPerson: 2.5, perArea: 0.3, occupantDensity: 50, combinedRate: 8.5, airClass: 1,
-                description: "ห้องประชุม (Conference Room)" 
+            reception_areas: { 
+                perPerson: 2.36, perArea: 0.30, occupantDensity: 30, combinedRate: 3.30, airClass: 1,
+                description: "พื้นที่รับแขกต้อนรับ (Reception Areas)" 
             },
-            reception: { 
-                perPerson: 2.5, perArea: 0.3, occupantDensity: 30, combinedRate: 8.5, airClass: 1,
-                description: "แผนกต้อนรับ (Reception)" 
-            },
-            
-            // อาหารและเครื่องดื่ม (Food & Beverage) - คงเดิม
-            restaurant_dining: { 
-                perPerson: 7.5, perArea: 0.9, occupantDensity: 70, combinedRate: 20, airClass: 1,
-                description: "ห้องอาหาร (Restaurant Dining)" 
-            },
-            cafeteria: { 
-                perPerson: 3.8, perArea: 0.6, occupantDensity: 100, combinedRate: 10, airClass: 1,
-                description: "โรงอาหาร (Cafeteria)" 
-            },
-            kitchen_commercial: { 
-                perPerson: 7.5, perArea: 0.6, occupantDensity: 20, combinedRate: 15, airClass: 2,
-                description: "ครัวพาณิชย์ (Commercial Kitchen)" 
-            },
-            bar_lounge: { 
-                perPerson: 7.5, perArea: 0.9, occupantDensity: 100, combinedRate: 30, airClass: 1,
-                description: "บาร์/ลาวน์จ (Bar/Lounge)" 
+            telephone_data_entry: { 
+                perPerson: 2.36, perArea: 0.30, occupantDensity: 60, combinedRate: 2.83, airClass: 1,
+                description: "พื้นที่โทรศัพท์/ป้อนข้อมูล (Telephone/Data Entry)" 
             },
             
-            // ร้านค้า (Retail) - คงเดิม
-            retail_sales: { 
-                perPerson: 3.8, perArea: 0.6, occupantDensity: 15, combinedRate: 7.5, airClass: 1,
-                description: "ร้านค้าปลีก (Retail Sales)" 
+            // 🔧 พื้นที่เบ็ดเตล็ด (Miscellaneous Spaces) - 12 types
+            bank_vaults: { 
+                perPerson: 2.36, perArea: 0.30, occupantDensity: 5, combinedRate: 8.03, airClass: 2,
+                description: "ตู้นิรภัยธนาคาร (Bank Vaults/Safe Deposit)" 
+            },
+            banks_lobbies: { 
+                perPerson: 3.54, perArea: 0.30, occupantDensity: 15, combinedRate: 5.66, airClass: 1,
+                description: "โถงธนาคาร (Banks or Bank Lobbies)" 
+            },
+            computer_not_printing: { 
+                perPerson: 2.36, perArea: 0.30, occupantDensity: 4, combinedRate: 9.44, airClass: 1,
+                description: "ห้องคอมพิวเตอร์ (ไม่มีการพิมพ์) (Computer Not Printing)" 
+            },
+            freezer_refrigerated: { 
+                perPerson: 4.72, perArea: 0, occupantDensity: 0, combinedRate: 0, airClass: 2,
+                description: "ห้องแช่แข็ง (<10° C) (Freezer and Refrigerated Spaces)" 
+            },
+            general_manufacturing: { 
+                perPerson: 4.72, perArea: 0.91, occupantDensity: 7, combinedRate: 17.00, airClass: 3,
+                description: "พื้นที่การผลิตทั่วไป (General Manufacturing)" 
+            },
+            pharmacy_prep: { 
+                perPerson: 2.36, perArea: 0.91, occupantDensity: 10, combinedRate: 10.85, airClass: 2,
+                description: "เภสัชกรรม (พื้นที่เตรียมยา) (Pharmacy Prep Area)" 
+            },
+            photo_studios: { 
+                perPerson: 2.36, perArea: 0.61, occupantDensity: 10, combinedRate: 8.03, airClass: 1,
+                description: "สตูดิโอถ่ายภาพ (Photo Studios)" 
+            },
+            shipping_receiving: { 
+                perPerson: 4.72, perArea: 0.61, occupantDensity: 2, combinedRate: 33.02, airClass: 2,
+                description: "พื้นที่จัดส่งรับสินค้า (Shipping/Receiving)" 
+            },
+            sorting_packing: { 
+                perPerson: 3.54, perArea: 0.61, occupantDensity: 7, combinedRate: 11.81, airClass: 2,
+                description: "พื้นที่คัดแยก บรรจุ ประกอบ (Sorting, Packing, Light Assembly)" 
+            },
+            telephone_closets: { 
+                perPerson: 0, perArea: 0, occupantDensity: 0, combinedRate: 0, airClass: 1,
+                description: "ตู้โทรศัพท์ (Telephone Closets)" 
+            },
+            transportation_waiting: { 
+                perPerson: 3.54, perArea: 0.30, occupantDensity: 100, combinedRate: 3.78, airClass: 1,
+                description: "พื้นที่รอการขนส่ง (Transportation Waiting)" 
+            },
+            warehouses: { 
+                perPerson: 4.72, perArea: 0.30, occupantDensity: 0, combinedRate: 0, airClass: 2,
+                description: "โกดัง (Warehouses)" 
+            },
+            
+            // 🎭 พื้นที่ชุมนุมสาธารณะ (Public Assembly Spaces) - 8 types
+            auditorium_seating: { 
+                perPerson: 2.36, perArea: 0.30, occupantDensity: 150, combinedRate: 2.36, airClass: 1,
+                description: "หอประชุม มีที่นั่งกำหนด (Auditorium Seating Area)" 
+            },
+            places_religious_worship: { 
+                perPerson: 2.36, perArea: 0.30, occupantDensity: 120, combinedRate: 2.83, airClass: 1,
+                description: "สถานที่ประกอบศาสนกิจ (Places of Religious Worship)" 
+            },
+            courtrooms: { 
+                perPerson: 2.36, perArea: 0.30, occupantDensity: 70, combinedRate: 2.83, airClass: 1,
+                description: "ห้องพิจารณาคดี (Courtrooms)" 
+            },
+            legislative_chambers: { 
+                perPerson: 2.36, perArea: 0.30, occupantDensity: 50, combinedRate: 2.83, airClass: 1,
+                description: "ห้องประชุมนิติบัญญัติ (Legislative Chambers)" 
+            },
+            libraries: { 
+                perPerson: 2.36, perArea: 0.61, occupantDensity: 10, combinedRate: 8.03, airClass: 1,
+                description: "ห้องสมุด (Libraries)" 
+            },
+            lobbies_public: { 
+                perPerson: 2.36, perArea: 0.30, occupantDensity: 150, combinedRate: 2.36, airClass: 1,
+                description: "ห้องโถงสาธารณะ (Lobbies)" 
+            },
+            museums_children: { 
+                perPerson: 3.54, perArea: 0.61, occupantDensity: 40, combinedRate: 5.19, airClass: 1,
+                description: "พิพิธภัณฑ์ (สำหรับเด็ก) (Museums Children's)" 
+            },
+            museums_galleries: { 
+                perPerson: 3.54, perArea: 0.30, occupantDensity: 40, combinedRate: 4.25, airClass: 1,
+                description: "พิพิธภัณฑ์/หอศิลป์ (Museums/Galleries)" 
+            },
+            
+            // 🏠 ที่อยู่อาศัย (Residential) - 2 types
+            dwelling_unit: { 
+                perPerson: 2.36, perArea: 0.30, occupantDensity: 0, combinedRate: 0, airClass: 1,
+                description: "หน่วยที่อยู่อาศัย (Dwelling Unit)" 
+            },
+            common_corridors: { 
+                perPerson: 0, perArea: 0.30, occupantDensity: 0, combinedRate: 0, airClass: 1,
+                description: "โถงทางเดินร่วม (Common Corridors)" 
+            },
+            
+            // 🛍️ ร้านค้า (Retail) - 8 types
+            sales_except_below: { 
+                perPerson: 3.54, perArea: 0.61, occupantDensity: 15, combinedRate: 7.56, airClass: 2,
+                description: "พื้นที่การขาย (ยกเว้นที่ระบุล่าง) (Sales Except as Below)" 
+            },
+            mall_common_areas: { 
+                perPerson: 3.54, perArea: 0.30, occupantDensity: 40, combinedRate: 4.25, airClass: 1,
+                description: "พื้นที่ใช้ร่วมกันในห้างสรรพสินค้า (Mall Common Areas)" 
+            },
+            barbershop: { 
+                perPerson: 3.54, perArea: 0.30, occupantDensity: 25, combinedRate: 4.72, airClass: 2,
+                description: "ร้านตัดผม (Barbershop)" 
+            },
+            beauty_nail_salons: { 
+                perPerson: 9.44, perArea: 0.61, occupantDensity: 25, combinedRate: 11.81, airClass: 2,
+                description: "ร้านเสริมสวยและทำเล็บ (Beauty and Nail Salons)" 
+            },
+            pet_shops: { 
+                perPerson: 3.54, perArea: 0.91, occupantDensity: 10, combinedRate: 12.28, airClass: 2,
+                description: "ร้านขายสัตว์เลี้ยง (Pet Shops Animal Areas)" 
             },
             supermarket: { 
-                perPerson: 3.8, perArea: 0.6, occupantDensity: 8, combinedRate: 7.5, airClass: 1,
+                perPerson: 3.54, perArea: 0.30, occupantDensity: 8, combinedRate: 7.08, airClass: 1,
                 description: "ซุปเปอร์มาร์เก็ต (Supermarket)" 
+            },
+            coin_operated_laundries: { 
+                perPerson: 3.54, perArea: 0.61, occupantDensity: 20, combinedRate: 6.61, airClass: 2,
+                description: "ร้านซักผ้าแบบหยอดเหรียญ (Coin-operated Laundries)" 
+            },
+            
+            // 🏃‍♂️ กีฬาและกิจกรรมบันเทิง (Sports and Entertainment) - 10 types
+            gym_sports_arena: { 
+                perPerson: 9.44, perArea: 0.91, occupantDensity: 7, combinedRate: 21.25, airClass: 2,
+                description: "ห้องออกกำลังกาย, สนามกีฬา (Gym, Sports Arena Play Area)" 
+            },
+            spectator_area: { 
+                perPerson: 3.54, perArea: 0.30, occupantDensity: 150, combinedRate: 3.78, airClass: 1,
+                description: "พื้นที่นั่งชมผู้ชม (Spectator Area)" 
+            },
+            swimming_pool_deck: { 
+                perPerson: 0, perArea: 2.44, occupantDensity: 0, combinedRate: 0, airClass: 2,
+                description: "สระว่ายน้ำและสวนเดก (Swimming Pool & Deck)" 
+            },
+            disco_dance_floors: { 
+                perPerson: 9.44, perArea: 0.30, occupantDensity: 100, combinedRate: 9.91, airClass: 2,
+                description: "พื้นที่เต้นรำในดิสโก้ (Disco/Dance Floors)" 
+            },
+            health_club_aerobics: { 
+                perPerson: 9.44, perArea: 0.30, occupantDensity: 40, combinedRate: 10.38, airClass: 2,
+                description: "เฮลท์คลับ ห้องแอโรบิค (Health Club/Aerobics Room)" 
+            },
+            health_club_weight_rooms: { 
+                perPerson: 9.44, perArea: 0.30, occupantDensity: 10, combinedRate: 12.28, airClass: 2,
+                description: "เฮลท์คลับ ห้องยกน้ำหนัก (Health Club/Weight Rooms)" 
+            },
+            bowling_alley_seating: { 
+                perPerson: 4.72, perArea: 0.61, occupantDensity: 40, combinedRate: 6.14, airClass: 1,
+                description: "โบว์ลิ่ง (พื้นที่นั่ง) (Bowling Alley Seating)" 
+            },
+            gambling_casinos: { 
+                perPerson: 3.54, perArea: 0.91, occupantDensity: 120, combinedRate: 4.25, airClass: 1,
+                description: "คาสิโน (Gambling Casinos)" 
+            },
+            game_arcades: { 
+                perPerson: 3.54, perArea: 0.91, occupantDensity: 20, combinedRate: 8.03, airClass: 1,
+                description: "ร้านเกม (Game Arcades)" 
+            },
+            stages_studios: { 
+                perPerson: 4.72, perArea: 0.30, occupantDensity: 70, combinedRate: 5.19, airClass: 1,
+                description: "เวทีและสตูดิโอ (Stages, Studios)" 
             }
         };
-        
+       
         // Metabolic rates by activity level (met units)
         const activityLevels = {
             sedentary: 1.0,       // นั่งทำงาน (1.0 met)
