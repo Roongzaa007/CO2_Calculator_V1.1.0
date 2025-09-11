@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASHRAE 62.1 Design Calculator - Improved</title>
+    <title>ASHRAE 62.1 Design Calculator - Manual Mode</title>
     <style>
         * {
             margin: 0;
@@ -986,7 +986,7 @@
             </div>
         </div>
         
-        <button class="calculate-btn" onclick="calculate()">🧮 คำนวณตาม ASHRAE 62.1 + CO2 Verification</button>
+        <button class="calculate-btn" onclick="calculateAndScroll()">🧮 คำนวณตาม ASHRAE 62.1 + CO2 Verification</button>
         
         <!-- Main Design Results (ASHRAE 62.1) -->
         <div class="results-main" id="resultsMain" style="display: none;">
@@ -1133,7 +1133,7 @@
         
         // Space types data (ASHRAE 62.1 Table 6.2.2.1) - Complete 78 space types
         const spaceTypes = {
-            // 🏛️ ทัณฑสถาน (Correctional Facilities) - 4 types
+            // 🏛️ Correctional Facilities - 4 types
             cell: { 
                 perPerson: 2.36, perArea: 0.61, occupantDensity: 25, combinedRate: 4.72, airClass: 2,
                 description: "ห้องคุมขังนักโทษ (Cell)" 
@@ -1151,7 +1151,7 @@
                 description: "ห้องรอ (Booking/Waiting)" 
             },
             
-            // 📚 สถานศึกษา (Educational Facilities) - 14 types
+            // 📚 Educational Facilities - 14 types
             daycare_age4: { 
                 perPerson: 4.72, perArea: 0.91, occupantDensity: 25, combinedRate: 8.03, airClass: 2,
                 description: "ศูนย์เด็กเล็ก อายุ 4 ขวบ (Daycare through age 4)" 
@@ -1206,10 +1206,10 @@
             },
             multiuse_assembly: { 
                 perPerson: 3.54, perArea: 0.30, occupantDensity: 100, combinedRate: 3.78, airClass: 1,
-                description: "ห้องประชุมอเนกประสงค์ (Multiuse Assembly)" 
+                description: "ห้องประชุมอเนกประสงค์ (Multipurpose Assembly)" 
             },
             
-            // 🍽️ อาหารและเครื่องดื่ม (Food and Beverage Service) - 4 types
+            // 🍽️ Food and Beverage Service - 4 types
             restaurant_dining: { 
                 perPerson: 3.54, perArea: 0.91, occupantDensity: 70, combinedRate: 4.72, airClass: 2,
                 description: "ร้านอาหารแบบนั่งกิน (Restaurant Dining Rooms)" 
@@ -1227,7 +1227,7 @@
                 description: "ห้องครัว (สำหรับปรุงอาหาร) (Kitchen Cooking)" 
             },
             
-            // 🏗️ ทั่วไป (General) - 5 types
+            // 🏗️ General - 5 types
             break_rooms: { 
                 perPerson: 2.36, perArea: 0.30, occupantDensity: 25, combinedRate: 3.30, airClass: 1,
                 description: "ห้องพักผ่อน (Break Rooms)" 
@@ -1249,7 +1249,7 @@
                 description: "ห้องเก็บของเหลวหรือเจล (Occupable Storage Rooms for Liquids or Gels)" 
             },
             
-            // 🏨 โรงแรม โมเต็ล รีสอร์ท หอพัก (Hotels, Motels, Resorts, Dormitories) - 6 types
+            // 🏨 Hotels, Motels, Resorts, Dormitories - 6 types
             bedroom_living_room: { 
                 perPerson: 2.36, perArea: 0.30, occupantDensity: 10, combinedRate: 5.19, airClass: 1,
                 description: "ห้องนอน/ห้องนั่งเล่น (Bedroom/Living Room)" 
@@ -1275,7 +1275,7 @@
                 description: "ห้องประชุมอเนกประสงค์ (Multipurpose Assembly)" 
             },
             
-            // 🏢 อาคารสำนักงาน (Office Buildings) - 6 types
+            // 🏢 Office Buildings - 6 types
             breakrooms_office: { 
                 perPerson: 2.36, perArea: 0.61, occupantDensity: 50, combinedRate: 3.30, airClass: 1,
                 description: "ห้องพักในสำนักงาน (Breakrooms)" 
@@ -1301,7 +1301,7 @@
                 description: "พื้นที่โทรศัพท์/ป้อนข้อมูล (Telephone/Data Entry)" 
             },
             
-            // 🔧 พื้นที่เบ็ดเตล็ด (Miscellaneous Spaces) - 12 types
+            // 🔧 Miscellaneous Spaces - 12 types
             bank_vaults: { 
                 perPerson: 2.36, perArea: 0.30, occupantDensity: 5, combinedRate: 8.03, airClass: 2,
                 description: "ตู้นิรภัยธนาคาร (Bank Vaults/Safe Deposit)" 
@@ -1351,7 +1351,7 @@
                 description: "โกดัง (Warehouses)" 
             },
             
-            // 🎭 พื้นที่ชุมนุมสาธารณะ (Public Assembly Spaces) - 8 types
+            // 🎭 Public Assembly Spaces - 8 types
             auditorium_seating: { 
                 perPerson: 2.36, perArea: 0.30, occupantDensity: 150, combinedRate: 2.36, airClass: 1,
                 description: "หอประชุม มีที่นั่งกำหนด (Auditorium Seating Area)" 
@@ -1385,7 +1385,7 @@
                 description: "พิพิธภัณฑ์/หอศิลป์ (Museums/Galleries)" 
             },
             
-            // 🏠 ที่อยู่อาศัย (Residential) - 2 types
+            // 🏠 Residential - 2 types
             dwelling_unit: { 
                 perPerson: 2.36, perArea: 0.30, occupantDensity: 0, combinedRate: 0, airClass: 1,
                 description: "หน่วยที่อยู่อาศัย (Dwelling Unit)" 
@@ -1395,7 +1395,7 @@
                 description: "โถงทางเดินร่วม (Common Corridors)" 
             },
             
-            // 🛍️ ร้านค้า (Retail) - 8 types
+            // 🛍️ Retail - 8 types
             sales_except_below: { 
                 perPerson: 3.54, perArea: 0.61, occupantDensity: 15, combinedRate: 7.56, airClass: 2,
                 description: "พื้นที่การขาย (ยกเว้นที่ระบุล่าง) (Sales Except as Below)" 
@@ -1425,7 +1425,7 @@
                 description: "ร้านซักผ้าแบบหยอดเหรียญ (Coin-operated Laundries)" 
             },
             
-            // 🏃‍♂️ กีฬาและกิจกรรมบันเทิง (Sports and Entertainment) - 10 types
+            // 🏃‍♂️ Sports and Entertainment - 10 types
             gym_sports_arena: { 
                 perPerson: 9.44, perArea: 0.91, occupantDensity: 7, combinedRate: 21.25, airClass: 2,
                 description: "ห้องออกกำลังกาย, สนามกีฬา (Gym, Sports Arena Play Area)" 
@@ -1479,7 +1479,6 @@
         // Helper function to set target CO2 values
         function setTargetCO2(value) {
             document.getElementById('targetCO2').value = value;
-            calculate();
         }
         
         // Toggle between SI and I-P units
@@ -1495,9 +1494,6 @@
             
             // Convert existing values
             convertInputValues();
-            
-            // Recalculate with new units
-            calculate();
         }
         
         function updateUnitLabels() {
@@ -1760,11 +1756,13 @@
             document.getElementById('resultsMain').style.display = 'block';
             document.getElementById('resultsVerification').style.display = 'block';
             document.getElementById('reportSection').style.display = 'block';
-            
-            // Smooth scroll to results
-            document.getElementById('resultsMain').scrollIntoView({ behavior: 'smooth' });
         }
 
+        function calculateAndScroll() {
+            calculate();
+            document.getElementById('resultsMain').scrollIntoView({ behavior: 'smooth' });
+        }
+        
         // Report Generation Functions
         function generateReport() {
             const reportContent = document.getElementById('reportContent');
@@ -2072,35 +2070,16 @@
             updateUnitLabels();
             updateArea();
             updateOccupantDensityGuide();
-            calculate();
             
-            // Add event listeners
-            document.getElementById('width').addEventListener('input', function() {
-                updateArea();
-                calculate();
-            });
+            // Update area/guide only on input changes
+            document.getElementById('width').addEventListener('input', updateArea);
+            document.getElementById('length').addEventListener('input', updateArea);
+            document.getElementById('occupancy').addEventListener('input', updateOccupantDensityGuide);
+            document.getElementById('spaceType').addEventListener('change', updateOccupantDensityGuide);
             
-            document.getElementById('length').addEventListener('input', function() {
-                updateArea();
-                calculate();
-            });
-            
-            // Add event listeners for other inputs
-            document.getElementById('occupancy').addEventListener('input', calculate);
-            document.getElementById('ceilingHeight').addEventListener('input', calculate);
-            document.getElementById('targetCO2').addEventListener('input', calculate);
-            document.getElementById('outdoorCO2').addEventListener('input', calculate);
-            document.getElementById('ventilationEff').addEventListener('input', calculate);
-            document.getElementById('spaceType').addEventListener('change', function() {
-                updateOccupantDensityGuide();
-                calculate();
-            });
-            document.getElementById('activityLevel').addEventListener('change', calculate);
-            document.getElementById('enableDCV').addEventListener('change', calculate);
+            // All calculations and scrolling are now handled by the button click
+            document.querySelector('.calculate-btn').addEventListener('click', calculateAndScroll);
         };
     </script>
 </body>
 </html>
-
-
-
